@@ -1,0 +1,84 @@
+h1 {
+text-align: center;
+}
+
+.wraper {
+	width: 1000px;
+	/*height: 500px;*/
+	border: solid 1px #000000;
+	margin: auto;
+}
+
+.conteiner {
+	padding: 10px;
+}
+
+.device-lamp {
+	border: solid 1px #000000;
+	margin-top: 10px;
+}
+
+.content-status-box {
+	display: flex;
+}
+
+.status-box {
+    border: solid 1px #000000;
+    padding: 2px;
+    flex-basis: 250px;
+    margin: 5px;
+ }
+
+
+.input-power {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.b_status {
+	width: 50px;
+	height: 30px;
+}
+
+
+.error-message {
+	color: #ff0000;
+	background: yellow;
+	border-radius: 5px;
+	text-align: center;
+	padding: 1em;
+}
+
+.device-state {
+	width: 100px;
+	padding: 0.5em;
+	margin: 0;
+	text-align: center;
+}
+
+.state-off {
+	color: red;
+	background: coral;
+}
+
+.state-on {
+	color: green;
+	background: lime;
+}
+
+
+.colm-cont {
+	display: flex;
+	/*width: 100%;*/
+}
+
+
+.colm {
+	display: flex;
+	flex-direction: column;
+    flex-basis: 33%;
+    padding: 0 5px;
+    flex-grow: 0;
+    flex-shrink: 1;
+}
+

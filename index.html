@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+    <div class="wraper">
+        <div class="conteiner">
+            <div class=" new-device">
+                <p>Добавить новое устройство</p>
+                <div>
+                    <label>Имя
+                        <input type="text" id="device-name-input">
+                    </label>
+                </div>
+                <div>
+                    <label>Тип
+                        <select id="device-type-input">
+                            <option value="lamp">Светильник</option>
+                            <option value="fridge">Холодильник</option>
+                            <option value="heater">Обогреватель</option>
+                            <option value="tv">Телевизор</option>
+                        </select>
+                    </label>
+                </div>
+                <div id="errors-box"></div>
+                <div>
+                    <button id="add-device-submit">Добавить</button>
+                </div>
+            </div>
+            <div id="rendering"></div>
+            <div class="all-devices" id="all-devices">
+            <div class="device-lamp">
+                <div>
+                    <p><span>Название:</span>
+                        <span>Лампа</span>
+                    </p>
+                        <p><span>Тип:</span>
+                            <span>Светильник</span>
+                        </p>
+                </div>
+                <div class="flex-content">
+                    <div class="content-status-box" id="lamps-container">
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>
