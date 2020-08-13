@@ -1,53 +1,92 @@
-const deviceModel = {
-     name: 'lamp-name',
-     type: 'lamp',
-     id: 'id',
-     state: false,
-     settings: {
-     	minBrightness: 1,
-     	maxBrightness: 100,
- 	},
-     currentBrightness: 1,
-     room: 'kitchen',
+class DeviceLamp {
 
-     switchOn() {
-     	if (this.state === true) {
-     		return;
-     	}
-     	this.state = true;
-     	console.dir(this);
-     },
+    constructor(name, id, room) {
+        this.name = name;
+        this.type = 'lamp';
+        this.id = id;
+        this.state = false;
+        this.settings = {
+            maxBrightness: 100,
+            minBrightness: 0
+        };
+        this.currentBrightness = this.settings.minBrightness;
+        this.room = room || 'some room';
+        console.dir(this);
+    }
+
+
+
+    switchOn() {
+        if (this.state === true) {
+            return;
+        }
+        this.state = true;
+        console.dir(this);
+     }
 
      switchOff() {
-     	if (this.state === false) {
-     		return;
-     	}
-     	this.state = false;
-     	console.dir(this);
-    },
+        if (this.state === false) {
+            return;
+        }
+        this.state = false;
+        console.dir(this);
+    }
 
      setMinBrightness() {
-     	this.currentBrightness = this.settings.minBrightness;
-     	console.dir(this);
-    },
+        this.currentBrightness = this.settings.minBrightness;
+        console.dir(this);
+    }
+
+    setMaxBrightness() {
+        this.currentBrightness = this.settings.maxBrightness;
+        console.dir(this);
+    }
 
      decreaseBrightness() {
- 	    if (this.currentBrightness <= this.settings.minBrightness) {
- 	         return;
- 	     }
- 	     // this.currentBrightness--;
- 	    this.currentBrightness -= 1;
- 	    console.dir(this);
- 	},
+        if (this.currentBrightness <= this.settings.minBrightness) {
+             return;
+         }
+         // this.currentBrightness--;
+        this.currentBrightness -= 1;
+        console.dir(this);
+    }
 
- 	setCustomValue(value) {
- 		if (typeof value !== 'number') {
- 			return;
- 		}
- 		if (value < this.settings.minBrightness || value > this.settings.maxBrightness) {
- 			return;
- 		}
+    increaseBrightness() {
+        if (this.currentBrightness >= this.settings.maxBrightness) {
+             return;
+         }
+         // this.currentBrightness--;
+        this.currentBrightness += 1;
+        console.dir(this);
+    }
+
+    setCustomBrightness(value) {
+        if (typeof value !== 'number') {
+            return;
+        }
+        if (value < this.settings.minBrightness || value > this.settings.maxBrightness) {
+            return;
+        }
       this.currentBrightness = value;
       console.dir(this);
- 	}
- };
+    }
+
+}
+
+const lamp = new DeviceLamp('name', 'type');
+
+console.dir(lamp); 
+
+lamp.setMaxBrightness();
+console.dir(lamp.currentBrightness);
+lamp.increaseBrightness()
+console.dir(lamp.currentBrightness);
+lamp.decreaseBrightness();
+console.dir(lamp.currentBrightness);
+lamp.increaseBrightness()
+console.dir(lamp.currentBrightness);
+lamp.increaseBrightness()
+console.dir(lamp.currentBrightness);
+
+
+
