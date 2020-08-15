@@ -4,12 +4,14 @@ class DeviceLamp {
         this.name = name;
         this.type = 'lamp';
         this.id = id;
-        this.state = false;
-        this.settings = {
-            maxBrightness: 100,
-            minBrightness: 0
-        };
-        this.currentBrightness = this.settings.minBrightness;
+        this.isSwitchedOn = false;
+        this.state = {
+            brightness: {
+                min: 0,
+                max: 100,
+                current: 0
+            },
+        }
         this.room = room || 'some room';
         console.dir(this);
     }
