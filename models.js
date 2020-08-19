@@ -64,12 +64,8 @@ class Device {
 
 class DeviceLamp extends Device {
 
-    constructor(name, type, id, room, brightness) {
-        super(name, type);
-        this.name = name;
-        this.type = 'lamp';
-        this.id = id;
-        this.isSwitchedOn = false;
+    constructor(name, id, room) {
+        super(name, 'lamp', id, room);
         this.state = {
             brightness: {
                 min: 0,
@@ -110,12 +106,8 @@ class DeviceLamp extends Device {
 
 class DeviceTv extends Device {
 
-    constructor(name, type, id, room, volume, channel) {
-        super(name, type);
-        this.name = name;
-        this.type = 'tv';
-        this.id = id;
-        this.isSwitchedOn = false;
+    constructor(name, id, room) {
+        super(name, 'tv', id, room);
         this.state = {
             volume: {
                 min: 0,
@@ -176,7 +168,7 @@ class DeviceTv extends Device {
 
 }
 
-const lamp = new DeviceLamp('name', 'type', 'id', 'room');
+const lamp = new DeviceLamp('name', 'id', 'room');
 console.dir(lamp);
 lamp.setMinBrightness();
 lamp.setMaxBrightness();
@@ -184,7 +176,7 @@ lamp.setMaxBrightness();
 // tv.setCustomValue('channel', 58);
 lamp.setCustomBrightness(33);
 
-const tv = new DeviceTv('name', 'type', 'id', 'room');
+const tv = new DeviceTv('name', 'id', 'room');
 console.dir(tv);
 tv.setMinVolume();
 tv.setMaxVolume();
