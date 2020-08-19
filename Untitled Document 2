@@ -1,13 +1,4 @@
-class Device {
-    constructor(name, type, id, room) {
-        this.name = name;
-        this.type = type;
-        this.id = id;
-        this.isSwitchedOn = false;
-        this.room = room || 'some room';
-    }
-
-    switchOn() {
+switchOn() {
         if (this.isSwitchedOn === true) {
             return;
         }
@@ -60,58 +51,20 @@ class Device {
         this.state[settingName].current = value;
         console.dir(this.state[settingName].current);
     }
-}
-
-class DeviceLamp extends Device {
-
-    constructor(name, type, id, room, brightness) {
-        super(name, type);
-        this.name = name;
-        this.type = 'lamp';
-        this.id = id;
-        this.isSwitchedOn = false;
-        this.state = {
-            brightness: {
-                min: 0,
-                max: 100,
-                current: 0
-            },
-        }
-    }
 
 
 
-    
-
-    setMinBrightness() {
-        this.setMin('brightness');
-    }
-
-    setMaxBrightness() {
-        this.setMax('brightness');
-    }
-
-   
-    decreaseBrightness() {
-        this.decrease('brightness');
-    }
-
-    increaseBrightness() {
-        this.increase('brightness');
-    }
-
-        
-    setCustomBrightness(value) {
-        this.setCustomValue('brightness', value)
-    }
-
-}
 
 
-class DeviceTv extends Device {
 
-    constructor(name, type, id, room, volume, channel) {
-        super(name, type);
+
+
+
+
+
+
+class DeviceTv {
+    constructor(name, id, room, volume) {
         this.name = name;
         this.type = 'tv';
         this.id = id;
@@ -128,7 +81,8 @@ class DeviceTv extends Device {
                 current: 1
             }
         };
-        // console.dir(this);
+        this.room = room || 'some room';
+        console.dir(this);
     }
 
     
@@ -175,30 +129,3 @@ class DeviceTv extends Device {
     }
 
 }
-
-const lamp = new DeviceLamp('name', 'type', 'id', 'room');
-console.dir(lamp);
-lamp.setMinBrightness();
-lamp.setMaxBrightness();
-// tv.setCustomValue('volume', 22);
-// tv.setCustomValue('channel', 58);
-lamp.setCustomBrightness(33);
-
-const tv = new DeviceTv('name', 'type', 'id', 'room');
-console.dir(tv);
-tv.setMinVolume();
-tv.setMaxVolume();
-tv.setMinChannel();
-tv.setMaxChannel();
-// tv.setCustomValue('volume', 22);
-// tv.setCustomValue('channel', 58);
-tv.setCustomVolume(2);
-tv.setCustomChanel(55);
-
-
-
-
-
-
-
-    
