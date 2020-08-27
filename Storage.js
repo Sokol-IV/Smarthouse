@@ -1,71 +1,46 @@
 class Storage {
-	
+    constructor() {
+        this.state = {
+            lamp: [],
+            tv: [],
+            fridge: [],
+            heater: []
+        }
+    }
+
+    addDevice(device) {
+        const type = device.type;
+        const devices = this.state[type];
+        if (devices && Array.isArray(devices)) {
+            devices.push(device);
+        }
+    }
+
+    removeDevice(device) {
+    	console.dir(device);
+    	delete device.id;
+    	const type = device.type;
+    	// if (device.type || device.id) {
+    	// 	return;
+    	// }
+        const devices = this.state[type];
+    	if (devices && Array.isArray(devices)) {
+    	    this.state[type] = devices.filter(item => item.id !== device.id);
+        }
+    }
 }
 
 
+let stor = new Storage();
+console.dir(stor);
+const lamp1 = new DeviceLamp('lamp1', '5', 'room');
+const lamp2 = new DeviceLamp('lamp2', '66', 'room');
+stor.addDevice(lamp1);
+stor.addDevice(lamp2);
+const tv1 = new DeviceTv('tv1', '10', 'room');
+stor.addDevice(tv1);
+console.dir(stor);
+stor.removeDevice(lamp1);
 
 
-class Device {
-	constructor(name, id, room) {
-        this.name = name;
-        this.type = type;
-        this.id = id;
-        this.isSwitchedOn = false;
-        this.room = room || 'some room';
-        console.dir(this);
-    }
 
-    switchOn() {
-        if (this.isSwitchedOn === true) {
-            return;
-        }
-        this.isSwitchedOn = true;
-        console.dir(this);
-     }
-
-     switchOff() {
-        if (this.isSwitchedOn === false) {
-            return;
-        }
-        this.isSwitchedOn = false;
-        console.dir(this);
-    }
-
-    setMin(settingName) {
-        console.dir(this.state[settingName].current);
-        this.state[settingName].current = this.state[settingName].min;
-        console.dir(this.state[settingName].current);
-    }
-
-
-    setMax(settingName) {
-        console.dir(this.state[settingName].current);
-        this.state[settingName].current = this.state[settingName].max;
-        console.dir(this.state[settingName].current);
-    }
-
-    decrease(settingName) {
-        if (this.state[settingName].current <= this.state[settingName].min) {
-             return;
-         }
-        this.state[settingName].current -= 1;
-    }
-
-    increase(settingName) {
-        if (this.state[settingName].current >= this.state[settingName].max) {
-             return;
-         }
-        this.state[settingName].current += 1;
-    }
-
-    setCustomValue(settingName, value) {
-        if (typeof value !== 'number') {
-            return;
-        }
-        if (value > this.state[settingName].max || value < this.state[settingName].min) {
-            return;
-        }
-        this.state[settingName].current = value;
-        console.dir(this.state[settingName].current);
-    }
-}
