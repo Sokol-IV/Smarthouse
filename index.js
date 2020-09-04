@@ -4,6 +4,8 @@ const addSubmitBtn = document.getElementById('add-device-submit');
 const errorsBox = document.getElementById('errors-box');
 const devicesArray = [];
 let id = 0;
+let stor = new Storage();
+console.dir(stor);
 
 
 
@@ -12,19 +14,39 @@ addSubmitBtn.addEventListener('click', processAddSubmit);
 
 function addDevice(name, type) {
 	id++;
-	const device = createDevice(name, type, id);
-    devicesArray.push(device);
-    console.dir(devicesArray);
+    let device;
+    switch(type) {
+        case 'lamp':
+            device = new DeviceLamp(name, id);
+            break;
+        case 'fridge':
+            device = new DeviceFridge(name, id);
+            break;
+        case 'tv':
+            device = new DeviceTv(name, id);
+            break;
+        case 'heater':
+            device = new DeviceHeater(name, id);
+            break;
+        default:
+            return;
+    }
+	
+    stor.addDevice(device);
+    console.dir(stor);
+
 }
 
-function createDevice(name, type, id) {
-	const device = {
-        name: name,
-        type: type,
-        id: id
-    };
-    return device;
-}
+
+
+// function createDevice(name, type, id) {
+// 	const device = {
+//         name: name,
+//         type: type,
+//         id: id
+//     };
+//     return device;
+// }
 
 function processAddSubmit(event) {
     errorsBox.innerHTML = '';
@@ -35,7 +57,7 @@ function processAddSubmit(event) {
         return;
     }
     addDevice(deviceName, deviceType); 
-    renderAllDevices();
+    // renderAllDevices();
     inputName.value = null;
     inputType.value = 'lamp';
 }
@@ -137,77 +159,77 @@ function renderDevice(deviceModel) {
 
 
 
-function renderAllDevices() {
-	const container = document.getElementById('lamps-container');
-	container.innerHTML = '';
-	for (let i = 0; i < devicesArray.length; i++) {
-		const device = renderDeviceLamp(devicesArray[i]);
-		device.addEventListener('click', processDeviceCardsClick);
-        container.appendChild(device);
-	}
-}
+// function renderAllDevices() {
+// 	const container = document.getElementById('lamps-container');
+// 	container.innerHTML = '';
+// 	for (let i = 0; i < devicesArray.length; i++) {
+// 		const device = renderDeviceLamp(devicesArray[i]);
+// 		device.addEventListener('click', processDeviceCardsClick);
+//         container.appendChild(device);
+// 	}
+// }
 
 
 
 
-function renderDeviceLamp(deviceModel) {
-	const newDeviceLamp = document.createElement('div');
-	newDeviceLamp.classList.add('status-box');
-	let type = '';
-	switch(deviceModel.type) {
-		case 'lamp':
-			type = 'Светильник';
-			break;
-		case 'fridge':
-			type = 'Холодильник';
-			break;
-		case 'tv':
-			type = 'Телевизор';
-			break;
-		case 'heater':
-			type = 'Обогреватель';
-			break;
-		default:
-			type = '';
-			break;
-	}
-	newDeviceLamp.innerHTML = '<div>'+
-								'<p><span>Название:&nbsp;</span>'+
-									'<span>' + deviceModel.name + '</span>'+
-								'</p>'+
-									'<p><span>Тип:&nbsp;</span>'+
-										'<span>' + type + '</span>'+
-									'</p>'+
-							'</div>'+
-							'<div>'+
-	                            '<div class="status">'+
-	                                '<p>Состояние</p>'+
-	                                '<p class="device-state state-off">Выключено</p>'+
-	                                '<button class="b-status" data-switch="on">Вкл</button>'+
-	                                '<button class="b-status" data-switch="off">Выкл</button>'+
-	                            '</div>'+
-	                            '<div class="power">'+
-	                                '<p class="m">'+
-	                                    '<span>Текущая яркость:</span>'+
-	                                    '<span class="device-ligth">0</span>'+
-	                                '</p>'+
-	                                '<div class="colm-cont">'+
-	                                    '<div class="colm">'+
-	                                        '<button data-brightness="max">max</button>'+
-	                                        '<button data-brightness="min">min</button>'+
-	                                    '</div>'+
-	                                    '<div class="colm">'+
-	                                        '<input class="input-power" type="number" name="">'+
-	                                        '<button data-brightness="custom-value">Задать</button>'+
-	                                    '</div>'+
-	                                    '<div class="colm">'+
-	                                        '<button data-brightness="increase">+</button>'+
-	                                        '<button data-brightness="decrease">-</button>'+
-	                                    '</div>'+
-	                                '</div>'+
-	                            '</div>'+
-	                        '</div>';
-    return newDeviceLamp;
-}
+// function renderDeviceLamp(deviceModel) {
+// 	const newDeviceLamp = document.createElement('div');
+// 	newDeviceLamp.classList.add('status-box');
+// 	let type = '';
+// 	switch(deviceModel.type) {
+// 		case 'lamp':
+// 			type = 'Светильник';
+// 			break;
+// 		case 'fridge':
+// 			type = 'Холодильник';
+// 			break;
+// 		case 'tv':
+// 			type = 'Телевизор';
+// 			break;
+// 		case 'heater':
+// 			type = 'Обогреватель';
+// 			break;
+// 		default:
+// 			type = '';
+// 			break;
+// 	}
+// 	newDeviceLamp.innerHTML = '<div>'+
+// 								'<p><span>Название:&nbsp;</span>'+
+// 									'<span>' + deviceModel.name + '</span>'+
+// 								'</p>'+
+// 									'<p><span>Тип:&nbsp;</span>'+
+// 										'<span>' + type + '</span>'+
+// 									'</p>'+
+// 							'</div>'+
+// 							'<div>'+
+// 	                            '<div class="status">'+
+// 	                                '<p>Состояние</p>'+
+// 	                                '<p class="device-state state-off">Выключено</p>'+
+// 	                                '<button class="b-status" data-switch="on">Вкл</button>'+
+// 	                                '<button class="b-status" data-switch="off">Выкл</button>'+
+// 	                            '</div>'+
+// 	                            '<div class="power">'+
+// 	                                '<p class="m">'+
+// 	                                    '<span>Текущая яркость:</span>'+
+// 	                                    '<span class="device-ligth">0</span>'+
+// 	                                '</p>'+
+// 	                                '<div class="colm-cont">'+
+// 	                                    '<div class="colm">'+
+// 	                                        '<button data-brightness="max">max</button>'+
+// 	                                        '<button data-brightness="min">min</button>'+
+// 	                                    '</div>'+
+// 	                                    '<div class="colm">'+
+// 	                                        '<input class="input-power" type="number" name="">'+
+// 	                                        '<button data-brightness="custom-value">Задать</button>'+
+// 	                                    '</div>'+
+// 	                                    '<div class="colm">'+
+// 	                                        '<button data-brightness="increase">+</button>'+
+// 	                                        '<button data-brightness="decrease">-</button>'+
+// 	                                    '</div>'+
+// 	                                '</div>'+
+// 	                            '</div>'+
+// 	                        '</div>';
+//     return newDeviceLamp;
+// }
 
 

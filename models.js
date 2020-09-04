@@ -1,10 +1,10 @@
 class Device {
-    constructor(name, type, id, room) {
+    constructor(name, type, id) {
         this.name = name;
         this.type = type;
         this.id = id;
         this.isSwitchedOn = false;
-        this.room = room || 'some room';
+        // this.room = room || 'some room';
     }
 
     switchOn() {
@@ -64,8 +64,8 @@ class Device {
 
 class DeviceLamp extends Device {
 
-    constructor(name, id, room) {
-        super(name, 'lamp', id, room);
+    constructor(name, id) {
+        super(name, 'lamp', id);
         this.state = {
             brightness: {
                 min: 0,
@@ -106,8 +106,8 @@ class DeviceLamp extends Device {
 
 class DeviceTv extends Device {
 
-    constructor(name, id, room) {
-        super(name, 'tv', id, room);
+    constructor(name, id) {
+        super(name, 'tv', id);
         this.state = {
             volume: {
                 min: 0,
@@ -168,24 +168,129 @@ class DeviceTv extends Device {
 
 }
 
-const lamp = new DeviceLamp('name', 'id', 'room');
-console.dir(lamp);
-lamp.setMinBrightness();
-lamp.setMaxBrightness();
-// tv.setCustomValue('volume', 22);
-// tv.setCustomValue('channel', 58);
-lamp.setCustomBrightness(33);
+class DeviceHeater extends Device {
 
-const tv = new DeviceTv('name', 'id', 'room');
-console.dir(tv);
-tv.setMinVolume();
-tv.setMaxVolume();
-tv.setMinChannel();
-tv.setMaxChannel();
-// tv.setCustomValue('volume', 22);
-// tv.setCustomValue('channel', 58);
-tv.setCustomVolume(2);
-tv.setCustomChanel(55);
+    constructor(name, id) {
+        super(name, 'heater', id);
+        this.state = {
+            temperature: {
+                min: 0,
+                max: 100,
+                current: 0
+            },
+        }
+    }
+
+
+
+    setMinTemperature() {
+        this.setMin('temperature');
+    }
+
+    setMaxTemperature() {
+        this.setMax('temperature');
+    }
+
+   
+    decreaseTemperature() {
+        this.decrease('temperature');
+    }
+
+    increaseTemperature() {
+        this.increase('temperature');
+    }
+
+        
+    setCustomTemperature(value) {
+        this.setCustomValue('temperature', value)
+    }
+
+}
+
+
+class DeviceFridge extends Device {
+
+    constructor(name, id) {
+        super(name, 'fridge', id);
+        this.state = {
+            coldstore: {
+                min: 2,
+                max: 6,
+                current: 0
+            },
+            freezer: {
+                min: -18,
+                max: -24,
+                current: 0
+            }
+        };
+        // console.dir(this);
+    }
+
+    
+
+    setMinColdstore() {
+        this.setMin('coldstore');
+    }
+
+    setMaxColdstore() {
+        this.setMax('coldstore');
+    }
+
+    setMinFreezer() {
+        this.setMin('freezer');
+    }
+
+    setMaxFreezer() {
+        this.setMax('freezer');
+    }
+
+    decreaseColdstore() {
+        this.decrease('coldstore');
+    }
+
+    increaseColdstore() {
+        this.increase('coldstore');
+    }
+
+    decreaseFreezer() {
+        this.decrease('channel');
+    }
+
+    increaseFreezer() {
+        this.increase('freezer');
+    }
+
+    
+    setCustomColdstore(value) {
+        this.setCustomValue('coldstore', value)
+    }
+
+    setCustomFreezer(value) {
+        this.setCustomValue('freezer', value)
+    }
+
+}
+// const deviceMain = new Device('name', 'type', 'id', 'room');
+// console.dir(deviceMain);
+// const lamp = new DeviceLamp('name', 'id', 'room');
+// console.dir(lamp);
+// lamp.setMinBrightness();
+// lamp.setMaxBrightness();
+// // tv.setCustomValue('volume', 22);
+// // tv.setCustomValue('channel', 58);
+// lamp.setCustomBrightness(33);
+
+// const tv = new DeviceTv('name', 'id', 'room');
+// console.dir(tv);
+// tv.setMinVolume();
+// tv.setMaxVolume();
+// tv.setMinChannel();
+// tv.setMaxChannel();
+// // tv.setCustomValue('volume', 22);
+// // tv.setCustomValue('channel', 58);
+// tv.setCustomVolume(2);
+// tv.setCustomChanel(55);
 
 
 
