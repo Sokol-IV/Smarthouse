@@ -34,6 +34,8 @@ function addDevice(name, type) {
 	
     stor.addDevice(device);
     console.dir(stor);
+    const lampPlate = new LampView(device);
+    console.dir(lampPlate.element);
 
 }
 
