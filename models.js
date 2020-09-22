@@ -51,13 +51,22 @@ class Device {
     }
 
     setCustomValue(settingName, value) {
-        if (typeof value !== 'number') {
+        if (typeof value !== 'string') {
             return;
         }
-        if (value > this.state[settingName].max || value < this.state[settingName].min) {
+        // const parsedValue = parseInt(value);
+
+        const parsedValue = +value;
+        console.dir(parsedValue);
+        console.dir(value);
+
+        if (isNaN(parsedValue)) {
+                return;
+            }
+        if (parsedValue > this.state[settingName].max || parsedValue < this.state[settingName].min) {
             return;
         }
-        this.state[settingName].current = value;
+        this.state[settingName].current = parsedValue;
         console.dir(this.state[settingName].current);
     }
 }
@@ -76,7 +85,9 @@ class DeviceLamp extends Device {
     }
 
 
-
+    get currentBrightness() {
+        return this.state.brightness.current;
+    }
     
 
     setMinBrightness() {
@@ -99,6 +110,8 @@ class DeviceLamp extends Device {
         
     setCustomBrightness(value) {
         this.setCustomValue('brightness', value)
+
+
     }
 
 }
@@ -123,7 +136,13 @@ class DeviceTv extends Device {
         // console.dir(this);
     }
 
-    
+    get currentChannel() {
+        return this.state.channel.current;
+    }
+
+     get currentVolume() {
+        return this.state.volume.current;
+    }
 
     setMinVolume() {
         this.setMin('volume');
@@ -162,7 +181,7 @@ class DeviceTv extends Device {
         this.setCustomValue('volume', value)
     }
 
-    setCustomChanel(value) {
+    setCustomChannel(value) {
         this.setCustomValue('channel', value)
     }
 

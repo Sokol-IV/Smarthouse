@@ -18,6 +18,11 @@ text-align: center;
 	margin-top: 10px;
 }
 
+.device-tv {
+	border: solid 1px #000000;
+	margin-top: 10px;
+}
+
 .content-status-box {
 	display: flex;
 }

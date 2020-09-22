@@ -9,6 +9,7 @@ console.dir(stor);
 
 
 
+
 addSubmitBtn.addEventListener('click', processAddSubmit);
 
 
@@ -35,7 +36,12 @@ function addDevice(name, type) {
     stor.addDevice(device);
     console.dir(stor);
     const lampPlate = new LampView(device);
+    const tvPlate = new TvView(device);
     console.dir(lampPlate.element);
+    console.dir(lampPlate);
+    console.dir(tvPlate);
+    document.getElementById('lamps-container').appendChild(lampPlate.element);
+    document.getElementById('lamps-container').appendChild(tvPlate.element);
 
 }
 
