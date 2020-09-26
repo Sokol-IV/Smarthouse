@@ -200,7 +200,9 @@ class DeviceHeater extends Device {
         }
     }
 
-
+    get currentTemperature() {
+        return this.state.temperature.current;
+    }
 
     setMinTemperature() {
         this.setMin('temperature');
@@ -246,7 +248,13 @@ class DeviceFridge extends Device {
         // console.dir(this);
     }
 
-    
+    get currentColdstore() {
+        return this.state.coldstore.current;
+    }
+
+     get currentFreezer() {
+        return this.state.freezer.current;
+    }
 
     setMinColdstore() {
         this.setMin('coldstore');
@@ -273,7 +281,7 @@ class DeviceFridge extends Device {
     }
 
     decreaseFreezer() {
-        this.decrease('channel');
+        this.decrease('freezer');
     }
 
     increaseFreezer() {

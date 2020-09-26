@@ -8,6 +8,7 @@ class Storage {
     	}
 	}
 
+
     addDevice(device) {
         const type = device.type;
         const devices = this.state[type];

@@ -6,6 +6,7 @@ const devicesArray = [];
 let id = 0;
 let stor = new Storage();
 console.dir(stor);
+const container = document.getElementById('lamps-container');
 
 
 
@@ -37,12 +38,17 @@ function addDevice(name, type) {
     console.dir(stor);
     const lampPlate = new LampView(device);
     const tvPlate = new TvView(device);
+    const heaterPlate = new HeaterView(device);
+    const fridgePlate = new FridgeView(device);
     console.dir(lampPlate.element);
     console.dir(lampPlate);
     console.dir(tvPlate);
+    console.dir(heaterPlate);
+    console.dir(fridgePlate);
     document.getElementById('lamps-container').appendChild(lampPlate.element);
     document.getElementById('lamps-container').appendChild(tvPlate.element);
-
+    document.getElementById('lamps-container').appendChild(heaterPlate.element);
+    document.getElementById('lamps-container').appendChild(fridgePlate.element);
 }
 
 
