@@ -3,6 +3,7 @@ class DeviceView {
 		this._model = model;
     	this._element = null; 
     	this._input = null;
+    	this._inputTwo = null; 
     	this._stateIndicator = null;
     	this._valueIndicator = null;
 	}
@@ -601,7 +602,8 @@ class TvView {
 
 class FridgeView extends DeviceView {
     constructor(name, id) {
-    	super(name);  
+    	super(name);
+    	// this._inputTwo = null;  
     }
 
     get element() {
@@ -617,7 +619,7 @@ class FridgeView extends DeviceView {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMaxColdstore();
-		this.refreshValueColdstorelView();
+		this.refreshValueColdstoreView();
 	}
 
 	processSetMinColdstoreClick(event) {
@@ -761,7 +763,7 @@ class FridgeView extends DeviceView {
       	});
 
       	elementTv.querySelector('[data-coldstore-decrease]').addEventListener('click', (event) => {
-      		this.processDecreaseChannelClick(event);
+      		this.processDecreaseColdstoreClick(event);
       	});
 
       	elementTv.querySelector('[data-coldstore-increase]').addEventListener('click', (event) => {
@@ -802,21 +804,10 @@ class FridgeView extends DeviceView {
       	this._inputTwo = this._element.getElementsByTagName('input')[1];  
 	}
 
-	refreshStateFredgeView() {
-		
-		if (this._model.isSwitchedOn) {
-			this._stateIndicator.classList.replace('state-off', 'state-on');
-            this._stateIndicator.textContent = 'Включено';
-        }
-        if (!this._model.isSwitchedOn) {
-            this._stateIndicator.classList.replace('state-on', 'state-off');
-            this._stateIndicator.textContent = 'Выключено';
-        }
-    }
+	
 
-    refreshValueColdstorelView() {
+    refreshValueColdstoreView() {
 		this._valueIndicator.textContent = this._model.currentColdstore;
-		console.dir(this._model.currentColdstore);
     }
 
     refreshValueFreezerView() {

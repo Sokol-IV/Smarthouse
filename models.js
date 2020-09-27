@@ -245,14 +245,13 @@ class DeviceFridge extends Device {
                 current: 0
             }
         };
-        // console.dir(this);
     }
 
     get currentColdstore() {
         return this.state.coldstore.current;
     }
 
-     get currentFreezer() {
+    get currentFreezer() {
         return this.state.freezer.current;
     }
 
@@ -281,11 +280,17 @@ class DeviceFridge extends Device {
     }
 
     decreaseFreezer() {
-        this.decrease('freezer');
+        if (this.state.freezer.current >= this.state.freezer.min) {
+             return;
+         }
+        this.state['freezer'].current += 1;
     }
 
     increaseFreezer() {
-        this.increase('freezer');
+        if (this.state.freezer.current <= this.state.freezer.max) {
+             return;
+         }
+        this.state['freezer'].current -= 1;
     }
 
     
