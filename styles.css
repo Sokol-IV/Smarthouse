@@ -9,7 +9,15 @@ text-align: center;
 	margin: auto;
 }
 
-.conteiner {
+.container {
+	padding: 10px;
+}
+
+.new-device {
+	padding: 10px;
+}
+
+.device-form {
 	padding: 10px;
 }
 

@@ -24,7 +24,6 @@ class DeviceView {
 	}
 
 	
-
 	refreshStateDeviceView() {
 		
 		if (this._model.isSwitchedOn) {
@@ -39,141 +38,59 @@ class DeviceView {
 }
 
 
-class HeaterView extends DeviceView {
-	constructor(name, id) {
-		super(name);
-    }
 
-	get element() {
+class FormView {
+	constructor(configs) {
+		this._element = null; 
+		console.dir(configs);
+		console.dir(configs.devicesTypes);
+		
+	}
+	
+ get element() {
     	if (this._element) {
 			return this._element;
 		}
-		this.renderHeaterView();
+		this.renderFormView(configs.devicesTypes);
 		return this._element;
 	}
 
-	processSetMaxTemperatureClick(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		this._model.setMaxTemperature();
-		this.refreshValueHeaterView();
-	}
-
-	processSetMinTemperatureClick(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		this._model.setMinTemperature();
-		this.refreshValueHeaterView();
-	}
-
-	processDecreaseTemperatureClick(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		this._model.decreaseTemperature();
-		this.refreshValueHeaterView();
-	}
-
-	processIncreaseTemperatureClick(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		this._model.increaseTemperature();
-		this.refreshValueHeaterView();
-	}
-
-	processSetCustomTemperatureClick(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		this._model.setCustomTemperature(this._input.value);
-		this.refreshValueHeaterView();
-		this.clearInput();
-	}
-
-	renderHeaterView() { 
+	renderFormView(devices) {
+		console.dir(devices);
 		const element = document.createElement('div');
-		element.classList.add('status-box');
+		element.classList.add('device-form');
 		element.innerHTML = '<div>'+
-							'<p><span>Название:&nbsp;</span>'+
-								'<span>' + this._model.name + '</span>'+
-							'</p>'+
-								'<p><span>Тип:&nbsp;</span>'+
-									'<span> Обогреватель </span>'+
-								'</p>'+
-						'</div>'+
-						'<div>'+
-                            '<div class="status">'+
-                                '<p>Состояние</p>'+
-                                '<p class="device-state state-off">Выключено</p>'+
-                                '<button class="b-status" data-switch-on>Вкл</button>'+
-                                '<button class="b-status" data-switch-off>Выкл</button>'+
-                            '</div>'+
-                            '<div class="power">'+
-                                '<p class="m">'+
-                                    '<span>Температура:</span>'+
-                                    '<span class="device-temp">0</span>'+
-                                '</p>'+
-                                '<div class="colm-cont">'+
-                                    '<div class="colm">'+
-                                        '<button data-temperature-max>max</button>'+
-                                        '<button data-temperature-min>min</button>'+
-                                    '</div>'+
-                                    '<div class="colm">'+
-                                        '<input class="input-power" type="number" name="">'+
-                                        '<button data-temperature-customValue>Задать</button>'+
-                                    '</div>'+
-                                    '<div class="colm">'+
-                                        '<button data-temperature-increase>+</button>'+
-                                        '<button data-temperature-decrease>-</button>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>'+
-                        '</div>';
+				'<div class=" new-device">'+
+                	'<p>Добавить новое устройство</p>'+
+                		'<div>'+
+                    		'<label>Имя'+
+                        		'<input type="text" id="device-name-input">'+
+                    		'</label>'+
+                		'</div>'+
+                '<div>'+
+                    '<label>Тип'+
+                        '<select id="device-type-input">'+
+                        '</select>'+
+                    '</label>'+
+                '</div>'+
+                	'<div id="errors-box"></div>'+
+                		'<div>'+
+                    		'<button id="add-device-submit">Добавить</button>'+
+                		'</div>'+
+            			'</div>'+
+            '</div>';
+            const select = element.querySelector('#device-type-input');
+        for (let i = 0; i < devices.length; i++) {
+        	console.dir(devices[i]);
+        	const option = document.createElement('option');
+        	option.setAttribute('value', devices[i].type);
+        	option.textContent = devices[i].title;
+        	select.appendChild(option);
 
-      	element.querySelector('[data-switch-on]').addEventListener('click', (event) => {
-      		this.processSwitchOnClick(event);
-      	}); 
-
-		element.querySelector('[data-switch-off]').addEventListener('click', (event) => {
-      		this.processSwitchOffClick(event);
-      	});
-
-      	element.querySelector('[data-temperature-max]').addEventListener('click', (event) => {
-      		this.processSetMaxTemperatureClick(event);
-      	});
-
-      	element.querySelector('[data-temperature-min]').addEventListener('click', (event) => {
-      		this.processSetMinTemperatureClick(event);
-      	});
-
-      	element.querySelector('[data-temperature-decrease]').addEventListener('click', (event) => {
-      		this.processDecreaseTemperatureClick(event);
-      	});
-
-      	element.querySelector('[data-temperature-increase]').addEventListener('click', (event) => {
-      		this.processIncreaseTemperatureClick(event);
-      	});
-
-      	element.querySelector('[data-temperature-customValue]').addEventListener('click', (event) => {
-      		this.processSetCustomTemperatureClick(event);
-      	}); 
-
-      	this._element = element;  
-      	this._stateIndicator = this._element.querySelector('.device-state');
-      	this._valueIndicator = this._element.querySelector('.device-temp'); 
-      	this._input = this._element.querySelector('input.input-power');
+        }
+        this._element = element;  
 	}
-
-	refreshValueHeaterView() {
-		this._valueIndicator.textContent = this._model.currentTemperature;
-		console.dir(this._model.currentTemperature);
-        
-    }
-
-    clearInput() {
-    	this._input.value = null;
-    }
 }
-
-
 
 
 class LampView {
@@ -276,11 +193,14 @@ class LampView {
                                         '<input class="input-power" type="number" name="">'+
                                         '<button data-brightness-customValue>Задать</button>'+
                                     '</div>'+
-                                    '<div class="colm">'+
+                                    '<div class="">'+
                                         '<button data-brightness-increase>+</button>'+
                                         '<button data-brightness-decrease>-</button>'+
                                     '</div>'+
                                 '</div>'+
+                                    '<div class="">'+
+                                        '<button data-brightness-increase>Удалисть устройство</button>'+
+                                    '</div>'+
                             '</div>'+
                         '</div>';
 
@@ -340,10 +260,6 @@ class LampView {
     }
 }
  
-
-
-
-
 
 class TvView {
     constructor(model) {
@@ -597,7 +513,139 @@ class TvView {
 
 }
 
-	
+class HeaterView extends DeviceView {
+	constructor(name, id) {
+		super(name);
+    }
+
+	get element() {
+    	if (this._element) {
+			return this._element;
+		}
+		this.renderHeaterView();
+		return this._element;
+	}
+
+	processSetMaxTemperatureClick(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		this._model.setMaxTemperature();
+		this.refreshValueHeaterView();
+	}
+
+	processSetMinTemperatureClick(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		this._model.setMinTemperature();
+		this.refreshValueHeaterView();
+	}
+
+	processDecreaseTemperatureClick(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		this._model.decreaseTemperature();
+		this.refreshValueHeaterView();
+	}
+
+	processIncreaseTemperatureClick(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		this._model.increaseTemperature();
+		this.refreshValueHeaterView();
+	}
+
+	processSetCustomTemperatureClick(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		this._model.setCustomTemperature(this._input.value);
+		this.refreshValueHeaterView();
+		this.clearInput();
+	}
+
+	renderHeaterView() { 
+		const element = document.createElement('div');
+		element.classList.add('status-box');
+		element.innerHTML = '<div>'+
+							'<p><span>Название:&nbsp;</span>'+
+								'<span>' + this._model.name + '</span>'+
+							'</p>'+
+								'<p><span>Тип:&nbsp;</span>'+
+									'<span> Обогреватель </span>'+
+								'</p>'+
+						'</div>'+
+						'<div>'+
+                            '<div class="status">'+
+                                '<p>Состояние</p>'+
+                                '<p class="device-state state-off">Выключено</p>'+
+                                '<button class="b-status" data-switch-on>Вкл</button>'+
+                                '<button class="b-status" data-switch-off>Выкл</button>'+
+                            '</div>'+
+                            '<div class="power">'+
+                                '<p class="m">'+
+                                    '<span>Температура:</span>'+
+                                    '<span class="device-temp">0</span>'+
+                                '</p>'+
+                                '<div class="colm-cont">'+
+                                    '<div class="colm">'+
+                                        '<button data-temperature-max>max</button>'+
+                                        '<button data-temperature-min>min</button>'+
+                                    '</div>'+
+                                    '<div class="colm">'+
+                                        '<input class="input-power" type="number" name="">'+
+                                        '<button data-temperature-customValue>Задать</button>'+
+                                    '</div>'+
+                                    '<div class="colm">'+
+                                        '<button data-temperature-increase>+</button>'+
+                                        '<button data-temperature-decrease>-</button>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+
+      	element.querySelector('[data-switch-on]').addEventListener('click', (event) => {
+      		this.processSwitchOnClick(event);
+      	}); 
+
+		element.querySelector('[data-switch-off]').addEventListener('click', (event) => {
+      		this.processSwitchOffClick(event);
+      	});
+
+      	element.querySelector('[data-temperature-max]').addEventListener('click', (event) => {
+      		this.processSetMaxTemperatureClick(event);
+      	});
+
+      	element.querySelector('[data-temperature-min]').addEventListener('click', (event) => {
+      		this.processSetMinTemperatureClick(event);
+      	});
+
+      	element.querySelector('[data-temperature-decrease]').addEventListener('click', (event) => {
+      		this.processDecreaseTemperatureClick(event);
+      	});
+
+      	element.querySelector('[data-temperature-increase]').addEventListener('click', (event) => {
+      		this.processIncreaseTemperatureClick(event);
+      	});
+
+      	element.querySelector('[data-temperature-customValue]').addEventListener('click', (event) => {
+      		this.processSetCustomTemperatureClick(event);
+      	}); 
+
+      	this._element = element;  
+      	this._stateIndicator = this._element.querySelector('.device-state');
+      	this._valueIndicator = this._element.querySelector('.device-temp'); 
+      	this._input = this._element.querySelector('input.input-power');
+	}
+
+	refreshValueHeaterView() {
+		this._valueIndicator.textContent = this._model.currentTemperature;
+		console.dir(this._model.currentTemperature);
+        
+    }
+
+    clearInput() {
+    	this._input.value = null;
+    }
+}
 
 
 class FridgeView extends DeviceView {
