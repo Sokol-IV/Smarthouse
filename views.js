@@ -40,11 +40,16 @@ class DeviceView {
 
 
 class FormView {
+
+	_element;
+	_inputName;
+	_inputType;
+	_addSubmitBtn;
+	_errorsBox;
+
 	constructor(configs) {
-		this._element = null; 
-		console.dir(configs);
-		console.dir(configs.devicesTypes);
-		
+		console.dir(this);
+		// console.dir(configs.devicesTypes);
 	}
 	
  get element() {
@@ -55,8 +60,10 @@ class FormView {
 		return this._element;
 	}
 
+	
+
 	renderFormView(devices) {
-		console.dir(devices);
+		// console.dir(devices);
 		const element = document.createElement('div');
 		element.classList.add('device-form');
 		element.innerHTML = '<div>'+
@@ -75,21 +82,55 @@ class FormView {
                 '</div>'+
                 	'<div id="errors-box"></div>'+
                 		'<div>'+
-                    		'<button id="add-device-submit">Добавить</button>'+
+                    		'<button id="add-device-submit" data-submit>Добавить</button>'+
                 		'</div>'+
             			'</div>'+
             '</div>';
             const select = element.querySelector('#device-type-input');
         for (let i = 0; i < devices.length; i++) {
-        	console.dir(devices[i]);
+        	const {type, title} = devices[i];
         	const option = document.createElement('option');
-        	option.setAttribute('value', devices[i].type);
-        	option.textContent = devices[i].title;
+        	option.setAttribute('value', type);
+        	option.textContent = title;
         	select.appendChild(option);
-
         }
-        this._element = element;  
-	}
+
+       	this._inputName = element.querySelector('#device-name-input');
+       	this._inputName.addEventListener('focus', this.clearErrorBox.bind(this));
+		this._inputType = element.querySelector('#device-type-input');
+		this._inputType.addEventListener('focus', this.clearErrorBox.bind(this));
+		this._addSubmitBtn = element.querySelector('#add-device-submit');
+		this._addSubmitBtn.addEventListener('click', this.processAddSubmitClick.bind(this));
+		this._errorsBox = element.querySelector('#errors-box');	
+        this._element = element;
+}
+
+processAddSubmitClick() {
+    const deviceName = this._inputName.value.trim();
+    const deviceType = this._inputType.value.trim();
+    if (!deviceName || !deviceType) {
+       this._errorsBox.innerHTML = '<p class="error-message">Поля ввода не должны быть пустыми</p>';
+        return;
+    }
+
+    const deviceData = {
+    	deviceName,
+    	deviceType
+    };
+    const deviceEvent = new CustomEvent('deviceWasCreated', {
+    	bubbles: true,
+    	detail: deviceData
+    });
+    this._element.dispatchEvent(deviceEvent);
+    this._inputName.value = null;
+    this._inputType.value = 'lamp';
+}
+
+clearErrorBox() {
+this._errorsBox.innerHTML = '';
+
+}
+
 }
 
 

@@ -7,7 +7,7 @@ const configs = {
     devicesTypes: [
         {
             type: 'lamp',
-            title: 'Лампы'
+            title: 'Светильник'
         },
         {
             type: 'fridge',
@@ -30,10 +30,45 @@ const configs = {
 };
 let id = 0;
 let stor = new Storage();
-const container = document.getElementById('container');
+
+const container = document.getElementById('rendering');
 const form = new FormView(configs);
 
 container.appendChild(form.element);
+container.addEventListener('deviceWasCreated', (event) => {
+    id++;
+    let device;
+    let element;
+    const type = event.detail.deviceType;
+    const name = event.detail.deviceName;
+    switch(type) {
+        case 'lamp':
+            device = new DeviceLamp(name, id);
+            element = new LampView(device);
+            break;
+        case 'fridge':
+            device = new DeviceFridge(name, id);
+            element = new FridgeView(device);
+            break;
+        case 'tv':
+            device = new DeviceTv(name, id);
+            element = new TvView(device);
+            break;
+        case 'heater':
+            device = new DeviceHeater(name, id);
+            element = new HeaterView(device);
+            break;
+        default:
+            return;
+    }
+    
+
+    stor.addDevice(device);
+   
+    const container =  document.getElementById('all-devices');
+    container.appendChild(element.element);
+    
+})
 
 
 
