@@ -1,13 +1,18 @@
 class DeviceView {
 	constructor(model) {
 		this._model = model;
-    	this._element = null; 
-    	this._input = null;
-    	this._inputTwo = null; 
+    	this._element = null;
     	this._stateIndicator = null;
-    	this._valueIndicator = null;
+		this._DeleteSubmitBtn = null;
 	}
 
+	get id () {
+		return this._model.id;
+	}
+
+	get type () {
+		return this._model.type;
+	}
 
 	processSwitchOnClick(event) {
 		event.preventDefault();
@@ -23,9 +28,9 @@ class DeviceView {
 		this.refreshStateDeviceView();
 	}
 
-	
+
 	refreshStateDeviceView() {
-		
+
 		if (this._model.isSwitchedOn) {
 			this._stateIndicator.classList.replace('state-off', 'state-on');
             this._stateIndicator.textContent = 'Включено';
@@ -35,6 +40,18 @@ class DeviceView {
             this._stateIndicator.textContent = 'Выключено';
         }
     }
+
+	processDeleteSubmitClick() {
+		const deviceDataSet = {
+			type: this._model.type,
+			id: this._model.id
+		};
+		const deviceEventDelete = new CustomEvent('deviceWasDelete', {
+			bubbles: true,
+			detail: deviceDataSet
+		});
+		this._element.dispatchEvent(deviceEventDelete);
+	}
 }
 
 
@@ -46,24 +63,26 @@ class FormView {
 	_inputType;
 	_addSubmitBtn;
 	_errorsBox;
+	_devicesTypes;
+	_uniqueTypes;
 
 	constructor(configs) {
-		console.dir(this);
-		// console.dir(configs.devicesTypes);
+		this._devicesTypes = configs.devicesTypes;
+		this._uniqueTypes = this._devicesTypes.reduce((previous, item) => {
+    		previous.add(item.type);
+    		return previous;
+    	}, new Set());
 	}
-	
+
  get element() {
     	if (this._element) {
 			return this._element;
 		}
-		this.renderFormView(configs.devicesTypes);
+		this.renderFormView();
 		return this._element;
 	}
 
-	
-
-	renderFormView(devices) {
-		// console.dir(devices);
+	renderFormView() {
 		const element = document.createElement('div');
 		element.classList.add('device-form');
 		element.innerHTML = '<div>'+
@@ -87,8 +106,8 @@ class FormView {
             			'</div>'+
             '</div>';
             const select = element.querySelector('#device-type-input');
-        for (let i = 0; i < devices.length; i++) {
-        	const {type, title} = devices[i];
+        for (let i = 0; i < this._devicesTypes.length; i++) {
+        	const {type, title} = this._devicesTypes[i];
         	const option = document.createElement('option');
         	option.setAttribute('value', type);
         	option.textContent = title;
@@ -101,14 +120,21 @@ class FormView {
 		this._inputType.addEventListener('focus', this.clearErrorBox.bind(this));
 		this._addSubmitBtn = element.querySelector('#add-device-submit');
 		this._addSubmitBtn.addEventListener('click', this.processAddSubmitClick.bind(this));
-		this._errorsBox = element.querySelector('#errors-box');	
+		this._errorsBox = element.querySelector('#errors-box');
         this._element = element;
 }
 
 processAddSubmitClick() {
     const deviceName = this._inputName.value.trim();
     const deviceType = this._inputType.value.trim();
-    if (!deviceName || !deviceType) {
+    
+  				
+	
+	// console.dir(_unicTypes);
+	console.dir(deviceType);
+
+
+    if (!deviceName || !deviceType || !this._uniqueTypes.has(deviceType)) {
        this._errorsBox.innerHTML = '<p class="error-message">Поля ввода не должны быть пустыми</p>';
         return;
     }
@@ -121,26 +147,27 @@ processAddSubmitClick() {
     	bubbles: true,
     	detail: deviceData
     });
+
+    console.dir(deviceData);
     this._element.dispatchEvent(deviceEvent);
     this._inputName.value = null;
     this._inputType.value = 'lamp';
 }
 
+
 clearErrorBox() {
 this._errorsBox.innerHTML = '';
-
 }
 
 }
 
 
-class LampView {
+class LampView extends DeviceView {
+
     constructor(model) {
-    	this._model = model;
-    	this._element = null; 
+    	super(model);
     	this._input = null;
-    	this._stateIndicator = null;
-    	this._valueIndicator = null;    
+    	this._valueIndicator = null;
     }
 
     get element() {
@@ -149,21 +176,6 @@ class LampView {
 		}
 		this.renderLampView();
 		return this._element;
-	}
-    	
-
-	processSwitchOnClick(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		this._model.switchOn();
-		this.refreshStateLampView();
-	}
-
-	processSwitchOffClick(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		this._model.switchOff();
-		this.refreshStateLampView();
 	}
 
 	processSetMaxBrightnessClick(event) {
@@ -202,7 +214,7 @@ class LampView {
 		this.clearInput();
 	}
 
-	renderLampView() { 
+	renderLampView() {
 		const element = document.createElement('div');
 		element.classList.add('status-box');
 		element.innerHTML = '<div>'+
@@ -234,20 +246,20 @@ class LampView {
                                         '<input class="input-power" type="number" name="">'+
                                         '<button data-brightness-customValue>Задать</button>'+
                                     '</div>'+
-                                    '<div class="">'+
+                                    '<div class="colm">'+
                                         '<button data-brightness-increase>+</button>'+
                                         '<button data-brightness-decrease>-</button>'+
                                     '</div>'+
                                 '</div>'+
-                                    '<div class="">'+
-                                        '<button data-brightness-increase>Удалисть устройство</button>'+
-                                    '</div>'+
                             '</div>'+
+                            	'<div class="colm">'+
+                                    '<button id="delete-device">Удалить устройство</button>'+
+                                '</div>'+
                         '</div>';
 
       	element.querySelector('[data-switch-on]').addEventListener('click', (event) => {
       		this.processSwitchOnClick(event);
-      	}); 
+      	});
 
 		element.querySelector('[data-switch-off]').addEventListener('click', (event) => {
       		this.processSwitchOffClick(event);
@@ -271,45 +283,33 @@ class LampView {
 
       	element.querySelector('[data-brightness-customValue]').addEventListener('click', (event) => {
       		this.processSetCustomBrightnessClick(event);
-      	}); 
+      	});
 
-      	this._element = element;  
+      	this._element = element;
       	this._stateIndicator = this._element.querySelector('.device-state');
-      	this._valueIndicator = this._element.querySelector('.device-ligth'); 
+      	this._valueIndicator = this._element.querySelector('.device-ligth');
       	this._input = this._element.querySelector('input.input-power');
-	}
 
-	refreshStateLampView() {
-		
-		if (this._model.isSwitchedOn) {
-			this._stateIndicator.classList.replace('state-off', 'state-on');
-            this._stateIndicator.textContent = 'Включено';
-        }
-        if (!this._model.isSwitchedOn) {
-            this._stateIndicator.classList.replace('state-on', 'state-off');
-            this._stateIndicator.textContent = 'Выключено';
-        }
-    }
+      	this._DeleteSubmitBtn = this._element.querySelector('#delete-device');
+		this._DeleteSubmitBtn.addEventListener('click', this.processDeleteSubmitClick.bind(this));
+	}
 
     refreshValueLampView() {
 		this._valueIndicator.textContent = this._model.currentBrightness;
-        
     }
 
     clearInput() {
     	this._input.value = null;
     }
 }
- 
 
-class TvView {
+class TvView extends DeviceView {
     constructor(model) {
-    	this._model = model;
-    	this._element = null; 
+    	super(model);
     	this._input = null;
     	this._inputTwo = null;
-    	this._stateIndicator = null;
-    	this._valueIndicator = null;    
+    	this._valueIndicator = null;
+    	this._valueIndicatorTwo = null;
     }
 
     get element() {
@@ -318,21 +318,6 @@ class TvView {
 		}
 		this.renderTvView();
 		return this._element;
-	}
-    	
-
-	processSwitchOnClick(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		this._model.switchOn();
-		this.refreshStateTvView();
-	}
-
-	processSwitchOffClick(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		this._model.switchOff();
-		this.refreshStateTvView();
 	}
 
 	processSetMaxChannelClick(event) {
@@ -465,10 +450,13 @@ class TvView {
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
+                            '<div class="colm">'+
+                                    '<button id="delete-device">Удалить устройство</button>'+
+                                '</div>'+
                         '</div>';
       	elementTv.querySelector('[data-switch-on]').addEventListener('click', (event) => {
       		this.processSwitchOnClick(event);
-      	}); 
+      	});
 
 		elementTv.querySelector('[data-switch-off]').addEventListener('click', (event) => {
       		this.processSwitchOffClick(event);
@@ -492,7 +480,7 @@ class TvView {
 
       	elementTv.querySelector('[data-channel-customValue]').addEventListener('click', (event) => {
       		this.processSetCustomChanelClick(event);
-      	}); 
+      	});
 
       	elementTv.querySelector('[data-volume-max]').addEventListener('click', (event) => {
       		this.processSetMaxVolumeClick(event);
@@ -512,29 +500,20 @@ class TvView {
 
       	elementTv.querySelector('[data-volume-customValue]').addEventListener('click', (event) => {
       		this.processSetCustomVolumeClick(event);
-      	}); 
+      	});
 
-      	this._element = elementTv; 
+      	this._element = elementTv;
 
-      	
+
       	this._stateIndicator = this._element.querySelector('.device-state');
       	this._valueIndicator = this._element.querySelector('.device-channel');
-      	this._valueIndicatorTwo = this._element.querySelector('.device-volume'); 
+      	this._valueIndicatorTwo = this._element.querySelector('.device-volume');
       	this._input = this._element.getElementsByTagName('input')[0];
-      	this._inputTwo = this._element.getElementsByTagName('input')[1];  
-	}
+      	this._inputTwo = this._element.getElementsByTagName('input')[1];
 
-	refreshStateTvView() {
-		
-		if (this._model.isSwitchedOn) {
-			this._stateIndicator.classList.replace('state-off', 'state-on');
-            this._stateIndicator.textContent = 'Включено';
-        }
-        if (!this._model.isSwitchedOn) {
-            this._stateIndicator.classList.replace('state-on', 'state-off');
-            this._stateIndicator.textContent = 'Выключено';
-        }
-    }
+      	this._DeleteSubmitBtn = this._element.querySelector('#delete-device');
+		this._DeleteSubmitBtn.addEventListener('click', this.processDeleteSubmitClick.bind(this));
+	}
 
     refreshValueChannelView() {
 		this._valueIndicator.textContent = this._model.currentChannel;
@@ -555,8 +534,10 @@ class TvView {
 }
 
 class HeaterView extends DeviceView {
-	constructor(name, id) {
-		super(name);
+	constructor(model) {
+		super(model);
+		this._input = null;
+		this._valueIndicator = null;
     }
 
 	get element() {
@@ -603,7 +584,7 @@ class HeaterView extends DeviceView {
 		this.clearInput();
 	}
 
-	renderHeaterView() { 
+	renderHeaterView() {
 		const element = document.createElement('div');
 		element.classList.add('status-box');
 		element.innerHTML = '<div>'+
@@ -641,11 +622,14 @@ class HeaterView extends DeviceView {
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
+							'<div class="colm">'+
+								'<button id="delete-device">Удалить устройство</button>'+
+							'</div>'+
                         '</div>';
 
       	element.querySelector('[data-switch-on]').addEventListener('click', (event) => {
       		this.processSwitchOnClick(event);
-      	}); 
+      	});
 
 		element.querySelector('[data-switch-off]').addEventListener('click', (event) => {
       		this.processSwitchOffClick(event);
@@ -669,18 +653,18 @@ class HeaterView extends DeviceView {
 
       	element.querySelector('[data-temperature-customValue]').addEventListener('click', (event) => {
       		this.processSetCustomTemperatureClick(event);
-      	}); 
+      	});
 
-      	this._element = element;  
+      	this._element = element;
       	this._stateIndicator = this._element.querySelector('.device-state');
-      	this._valueIndicator = this._element.querySelector('.device-temp'); 
+      	this._valueIndicator = this._element.querySelector('.device-temp');
       	this._input = this._element.querySelector('input.input-power');
+		this._DeleteSubmitBtn = this._element.querySelector('#delete-device');
+		this._DeleteSubmitBtn.addEventListener('click', this.processDeleteSubmitClick.bind(this));
 	}
 
 	refreshValueHeaterView() {
 		this._valueIndicator.textContent = this._model.currentTemperature;
-		console.dir(this._model.currentTemperature);
-        
     }
 
     clearInput() {
@@ -690,9 +674,12 @@ class HeaterView extends DeviceView {
 
 
 class FridgeView extends DeviceView {
-    constructor(name, id) {
-    	super(name);
-    	// this._inputTwo = null;  
+    constructor(model) {
+    	super(model);
+		this._input = null;
+		this._inputTwo = null;
+		this._valueIndicator = null;
+		this._valueIndicatorTwo = null;
     }
 
     get element() {
@@ -702,7 +689,6 @@ class FridgeView extends DeviceView {
 		this.renderFridgeView();
 		return this._element;
 	}
-    	
 
 	processSetMaxColdstoreClick(event) {
 		event.preventDefault();
@@ -834,10 +820,13 @@ class FridgeView extends DeviceView {
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
+							'<div class="colm">'+
+								'<button id="delete-device">Удалить устройство</button>'+
+							'</div>'+
                         '</div>';
       	elementTv.querySelector('[data-switch-on]').addEventListener('click', (event) => {
       		this.processSwitchOnClick(event);
-      	}); 
+      	});
 
 		elementTv.querySelector('[data-switch-off]').addEventListener('click', (event) => {
       		this.processSwitchOffClick(event);
@@ -861,7 +850,7 @@ class FridgeView extends DeviceView {
 
       	elementTv.querySelector('[data-coldstore-customValue]').addEventListener('click', (event) => {
       		this.processSetCustomColdstoreClick(event);
-      	}); 
+      	});
 
       	elementTv.querySelector('[data-freezer-max]').addEventListener('click', (event) => {
       		this.processSetMaxFreezerClick(event);
@@ -881,19 +870,21 @@ class FridgeView extends DeviceView {
 
       	elementTv.querySelector('[data-freezer-customValue]').addEventListener('click', (event) => {
       		this.processSetCustomFreezerClick(event);
-      	}); 
+      	});
 
-      	this._element = elementTv; 
+      	this._element = elementTv;
 
-      	
+
       	this._stateIndicator = this._element.querySelector('.device-state');
       	this._valueIndicator = this._element.querySelector('.device-coldstore');
-      	this._valueIndicatorTwo = this._element.querySelector('.device-freezer'); 
+      	this._valueIndicatorTwo = this._element.querySelector('.device-freezer');
       	this._input = this._element.getElementsByTagName('input')[0];
-      	this._inputTwo = this._element.getElementsByTagName('input')[1];  
+      	this._inputTwo = this._element.getElementsByTagName('input')[1];
+		this._DeleteSubmitBtn = this._element.querySelector('#delete-device');
+		this._DeleteSubmitBtn.addEventListener('click', this.processDeleteSubmitClick.bind(this));
 	}
 
-	
+
 
     refreshValueColdstoreView() {
 		this._valueIndicator.textContent = this._model.currentColdstore;
@@ -901,7 +892,6 @@ class FridgeView extends DeviceView {
 
     refreshValueFreezerView() {
 		this._valueIndicatorTwo.textContent = this._model.currentFreezer;
-		console.dir(this._model.currentFreezer);
     }
 
     clearInputColdstore() {
@@ -913,8 +903,3 @@ class FridgeView extends DeviceView {
     }
 
 }
-
-
-
-	
-
