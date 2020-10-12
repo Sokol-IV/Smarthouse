@@ -1,49 +1,54 @@
-class Device {
-    constructor(name, type, id) {
+function Device(name, type, id) {
         this.name = name;
         this.type = type;
         this.id = id;
         this.isSwitchedOn = false;
-    }
+        this.state = {};
+}
 
-    switchOn() {
+
+
+Device.prototype.switchOn = function() {
+
         if (this.isSwitchedOn === true) {
-            return;
+                return;
         }
         this.isSwitchedOn = true;
-     }
+}
 
-     switchOff() {
+Device.prototype.switchOff = function() {
+
         if (this.isSwitchedOn === false) {
-            return;
+                return;
         }
         this.isSwitchedOn = false;
-    }
+}
 
-    setMin(settingName) {
+
+    Device.prototype.setMin = function(settingName) {
         this.state[settingName].current = this.state[settingName].min;
     }
 
 
-    setMax(settingName) {
+    Device.prototype.setMax = function(settingName) {
         this.state[settingName].current = this.state[settingName].max;
     }
 
-    decrease(settingName) {
+    Device.prototype.decrease = function(settingName) {
         if (this.state[settingName].current <= this.state[settingName].min) {
              return;
          }
         this.state[settingName].current -= 1;
     }
 
-    increase(settingName) {
+    Device.prototype.increase = function(settingName) {
         if (this.state[settingName].current >= this.state[settingName].max) {
              return;
          }
         this.state[settingName].current += 1;
     }
 
-    setCustomValue(settingName, value) {
+    Device.prototype.setCustomValue = function(settingName, value) {
         if (typeof value !== 'string') {
             return;
         }
@@ -57,7 +62,7 @@ class Device {
         }
         this.state[settingName].current = parsedValue;
     }
-}
+
 
 class DeviceLamp extends Device {
 
@@ -76,7 +81,7 @@ class DeviceLamp extends Device {
     get currentBrightness() {
         return this.state.brightness.current;
     }
-    
+
 
     setMinBrightness() {
         this.setMin('brightness');
@@ -86,7 +91,7 @@ class DeviceLamp extends Device {
         this.setMax('brightness');
     }
 
-   
+
     decreaseBrightness() {
         this.decrease('brightness');
     }
@@ -95,7 +100,7 @@ class DeviceLamp extends Device {
         this.increase('brightness');
     }
 
-        
+
     setCustomBrightness(value) {
         this.setCustomValue('brightness', value)
 
@@ -163,7 +168,7 @@ class DeviceTv extends Device {
         this.increase('channel');
     }
 
-    
+
     setCustomVolume(value) {
         this.setCustomValue('volume', value)
     }
@@ -199,7 +204,7 @@ class DeviceHeater extends Device {
         this.setMax('temperature');
     }
 
-   
+
     decreaseTemperature() {
         this.decrease('temperature');
     }
@@ -208,7 +213,7 @@ class DeviceHeater extends Device {
         this.increase('temperature');
     }
 
-        
+
     setCustomTemperature(value) {
         this.setCustomValue('temperature', value)
     }
@@ -280,7 +285,7 @@ class DeviceFridge extends Device {
         this.state['freezer'].current -= 1;
     }
 
-    
+
     setCustomColdstore(value) {
         this.setCustomValue('coldstore', value)
     }
@@ -296,4 +301,3 @@ class DeviceFridge extends Device {
 
 
 
-    
