@@ -26,6 +26,7 @@ class Controller {
 		switch(deviceType) {
 			case 'lamp':
 				device = new DeviceLamp(deviceName, id);
+				console.dir(device);
 				element = new LampView(device);
 				break;
 			case 'fridge':

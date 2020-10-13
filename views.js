@@ -295,7 +295,7 @@ class LampView extends DeviceView {
 	}
 
     refreshValueLampView() {
-		this._valueIndicator.textContent = this._model.currentBrightness;
+		this._valueIndicator.textContent = this._model.getCurrentBrightness();
     }
 
     clearInput() {
@@ -516,11 +516,11 @@ class TvView extends DeviceView {
 	}
 
     refreshValueChannelView() {
-		this._valueIndicator.textContent = this._model.currentChannel;
+		this._valueIndicator.textContent = this._model.getCurrentChannel();
     }
 
     refreshValueVolumeView() {
-		this._valueIndicatorTwo.textContent = this._model.currentVolume;
+		this._valueIndicatorTwo.textContent = this._model.getCurrentVolume();
     }
 
     clearInputChannel() {
@@ -664,8 +664,9 @@ class HeaterView extends DeviceView {
 	}
 
 	refreshValueHeaterView() {
-		this._valueIndicator.textContent = this._model.currentTemperature;
+		this._valueIndicator.textContent = this._model.getCurrentTemperature();
     }
+
 
     clearInput() {
     	this._input.value = null;
@@ -887,11 +888,11 @@ class FridgeView extends DeviceView {
 
 
     refreshValueColdstoreView() {
-		this._valueIndicator.textContent = this._model.currentColdstore;
+		this._valueIndicator.textContent = this._model.getCurrentColdstore();
     }
 
     refreshValueFreezerView() {
-		this._valueIndicatorTwo.textContent = this._model.currentFreezer;
+		this._valueIndicatorTwo.textContent = this._model.getCurrentFreezer();
     }
 
     clearInputColdstore() {

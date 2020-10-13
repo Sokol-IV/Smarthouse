@@ -8,45 +8,45 @@ function Device(name, type, id) {
 
 
 
-Device.prototype.switchOn = function() {
+    Device.prototype.switchOn = function() {
 
-        if (this.isSwitchedOn === true) {
-                return;
-        }
-        this.isSwitchedOn = true;
-}
+            if (this.isSwitchedOn === true) {
+                    return;
+            }
+            this.isSwitchedOn = true;
+    }
 
-Device.prototype.switchOff = function() {
+    Device.prototype.switchOff = function() {
 
-        if (this.isSwitchedOn === false) {
-                return;
-        }
-        this.isSwitchedOn = false;
-}
+            if (this.isSwitchedOn === false) {
+                    return;
+            }
+            this.isSwitchedOn = false;
+    }
 
 
     Device.prototype.setMin = function(settingName) {
         this.state[settingName].current = this.state[settingName].min;
-    }
+    };
 
 
     Device.prototype.setMax = function(settingName) {
         this.state[settingName].current = this.state[settingName].max;
-    }
+    };
 
     Device.prototype.decrease = function(settingName) {
         if (this.state[settingName].current <= this.state[settingName].min) {
              return;
          }
         this.state[settingName].current -= 1;
-    }
+    };
 
     Device.prototype.increase = function(settingName) {
         if (this.state[settingName].current >= this.state[settingName].max) {
              return;
          }
         this.state[settingName].current += 1;
-    }
+    };
 
     Device.prototype.setCustomValue = function(settingName, value) {
         if (typeof value !== 'string') {
@@ -61,59 +61,61 @@ Device.prototype.switchOff = function() {
             return;
         }
         this.state[settingName].current = parsedValue;
+    };
+
+
+function DeviceLamp () {
+
+    Device.apply(this, ['name', 'lamp', 'id']);
+    this.state = {
+        brightness: {
+            min: 0,
+            max: 100,
+            current: 0
+        },
     }
-
-
-class DeviceLamp extends Device {
-
-    constructor(name, id) {
-        super(name, 'lamp', id);
-        this.state = {
-            brightness: {
-                min: 0,
-                max: 100,
-                current: 0
-            },
-        }
-    }
-
-
-    get currentBrightness() {
-        return this.state.brightness.current;
-    }
-
-
-    setMinBrightness() {
-        this.setMin('brightness');
-    }
-
-    setMaxBrightness() {
-        this.setMax('brightness');
-    }
-
-
-    decreaseBrightness() {
-        this.decrease('brightness');
-    }
-
-    increaseBrightness() {
-        this.increase('brightness');
-    }
-
-
-    setCustomBrightness(value) {
-        this.setCustomValue('brightness', value)
-
-
-    }
-
 }
 
+    DeviceLamp.prototype = Object.create(Device.prototype);
+    DeviceLamp.prototype.constructor = DeviceLamp;
 
-class DeviceTv extends Device {
+    DeviceLamp.prototype.getCurrentBrightness = function() {
+        return this.state.brightness.current;
+    }
+        
+    // get currentBrightness() {
+    //     return this.state.brightness.current;
+    // }
 
-    constructor(name, id) {
-        super(name, 'tv', id);
+
+    DeviceLamp.prototype.setMinBrightness = function() {
+        this.setMin('brightness');
+    };
+
+    DeviceLamp.prototype.setMaxBrightness = function() {
+        this.setMax('brightness');
+    };
+
+
+    DeviceLamp.prototype.decreaseBrightness = function() {
+        this.decrease('brightness');
+    };
+
+    DeviceLamp.prototype.increaseBrightness = function() {
+        this.increase('brightness');
+    };
+
+
+    DeviceLamp.prototype.setCustomBrightness = function(value) {
+        this.setCustomValue('brightness', value)
+    };
+
+
+
+
+function DeviceTv() {
+
+    Device.apply(this, ['name', 'tv', 'id']);
         this.state = {
             volume: {
                 min: 0,
@@ -128,61 +130,64 @@ class DeviceTv extends Device {
         };
     }
 
-    get currentChannel() {
+    DeviceTv.prototype = Object.create(Device.prototype);
+    DeviceTv.prototype.constructor = DeviceTv;
+
+    DeviceTv.prototype.getCurrentChannel = function() {
         return this.state.channel.current;
     }
 
-     get currentVolume() {
-        return this.state.volume.current;
-    }
+    DeviceTv.prototype.getCurrentVolume = function() {
+        return this.state.volume.current;    }    
 
-    setMinVolume() {
+     
+
+    DeviceTv.prototype.setMinVolume = function() {
         this.setMin('volume');
     }
 
-    setMaxVolume() {
+    DeviceTv.prototype.setMaxVolume = function() {
         this.setMax('volume');
     }
 
-    setMinChannel() {
+    DeviceTv.prototype.setMinChannel = function() {
         this.setMin('channel');
     }
 
-    setMaxChannel() {
+    DeviceTv.prototype.setMaxChannel = function() {
         this.setMax('channel');
     }
 
-    decreaseVolume() {
+    DeviceTv.prototype.decreaseVolume = function() {
         this.decrease('volume');
     }
 
-    increaseVolume() {
+    DeviceTv.prototype.increaseVolume = function() {
         this.increase('volume');
     }
 
-    decreaseChannel() {
+    DeviceTv.prototype.decreaseChannel = function() {
         this.decrease('channel');
     }
 
-    increaseChannel() {
+    DeviceTv.prototype.increaseChannel = function() {
         this.increase('channel');
     }
 
 
-    setCustomVolume(value) {
+    DeviceTv.prototype.setCustomVolume = function(value) {
         this.setCustomValue('volume', value)
     }
 
-    setCustomChannel(value) {
+    DeviceTv.prototype.setCustomChannel = function(value) {
         this.setCustomValue('channel', value)
     }
 
-}
 
-class DeviceHeater extends Device {
 
-    constructor(name, id) {
-        super(name, 'heater', id);
+function DeviceHeater() {
+
+    Device.apply(this, ['name', 'heater', 'id']);
         this.state = {
             temperature: {
                 min: 0,
@@ -192,39 +197,41 @@ class DeviceHeater extends Device {
         }
     }
 
-    get currentTemperature() {
+    DeviceHeater.prototype = Object.create(Device.prototype);
+    DeviceHeater.prototype.constructor = DeviceHeater;
+
+    DeviceHeater.prototype.getCurrentTemperature = function() {
         return this.state.temperature.current;
     }
 
-    setMinTemperature() {
+    
+
+    DeviceHeater.prototype.setMinTemperature = function() {
         this.setMin('temperature');
     }
 
-    setMaxTemperature() {
+    DeviceHeater.prototype.setMaxTemperature = function() {
         this.setMax('temperature');
     }
 
 
-    decreaseTemperature() {
+    DeviceHeater.prototype.decreaseTemperature = function() {
         this.decrease('temperature');
     }
 
-    increaseTemperature() {
+    DeviceHeater.prototype.increaseTemperature = function() {
         this.increase('temperature');
     }
 
 
-    setCustomTemperature(value) {
+    DeviceHeater.prototype.setCustomTemperature = function(value) {
         this.setCustomValue('temperature', value)
     }
 
-}
 
+function DeviceFridge() {
 
-class DeviceFridge extends Device {
-
-    constructor(name, id) {
-        super(name, 'fridge', id);
+    Device.apply(this, ['name', 'fridge', 'id']);
         this.state = {
             coldstore: {
                 min: 2,
@@ -239,46 +246,52 @@ class DeviceFridge extends Device {
         };
     }
 
-    get currentColdstore() {
+    DeviceFridge.prototype = Object.create(Device.prototype);
+    DeviceFridge.prototype.constructor = DeviceFridge;
+
+
+    DeviceFridge.prototype.getCurrentColdstore = function() {
         return this.state.coldstore.current;
     }
 
-    get currentFreezer() {
-        return this.state.freezer.current;
-    }
+    DeviceFridge.prototype.getCurrentFreezer = function() {
+       return this.state.freezer.current;   }    
 
-    setMinColdstore() {
+   
+    
+
+    DeviceFridge.prototype.setMinColdstore = function() {
         this.setMin('coldstore');
     }
 
-    setMaxColdstore() {
+    DeviceFridge.prototype.setMaxColdstore = function() {
         this.setMax('coldstore');
     }
 
-    setMinFreezer() {
+    DeviceFridge.prototype.setMinFreezer = function() {
         this.setMin('freezer');
     }
 
-    setMaxFreezer() {
+    DeviceFridge.prototype.setMaxFreezer = function() {
         this.setMax('freezer');
     }
 
-    decreaseColdstore() {
+    DeviceFridge.prototype.decreaseColdstore = function() {
         this.decrease('coldstore');
     }
 
-    increaseColdstore() {
+    DeviceFridge.prototype.increaseColdstore = function() {
         this.increase('coldstore');
     }
 
-    decreaseFreezer() {
+    DeviceFridge.prototype.decreaseFreezer = function() {
         if (this.state.freezer.current >= this.state.freezer.min) {
              return;
          }
         this.state['freezer'].current += 1;
     }
 
-    increaseFreezer() {
+    DeviceFridge.prototype.increaseFreezer = function() {
         if (this.state.freezer.current <= this.state.freezer.max) {
              return;
          }
@@ -286,15 +299,13 @@ class DeviceFridge extends Device {
     }
 
 
-    setCustomColdstore(value) {
+    DeviceFridge.prototype.setCustomColdstore = function(value) {
         this.setCustomValue('coldstore', value)
     }
 
-    setCustomFreezer(value) {
+    DeviceFridge.prototype.setCustomFreezer = function(value) {
         this.setCustomValue('freezer', value)
     }
-
-}
 
 
 
