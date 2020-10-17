@@ -83,11 +83,7 @@ function DeviceLamp () {
         return this.state.brightness.current;
     }
         
-    // get currentBrightness() {
-    //     return this.state.brightness.current;
-    // }
-
-
+    
     DeviceLamp.prototype.setMinBrightness = function() {
         this.setMin('brightness');
     };

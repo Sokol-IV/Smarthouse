@@ -8,7 +8,9 @@ class Controller {
 
 	init() {
 		const formContainer = document.getElementById('form-rendering');
+		console.dir(formContainer);
 		const form = new FormView(configs);
+		console.dir(form);
 		formContainer.appendChild(form.element);
 		this._container = document.getElementById('container');
 		this._devicesContainer = document.getElementById('all-devices');
@@ -28,6 +30,7 @@ class Controller {
 				device = new DeviceLamp(deviceName, id);
 				console.dir(device);
 				element = new LampView(device);
+				console.dir(element);
 				break;
 			case 'fridge':
 				device = new DeviceFridge(deviceName, id);

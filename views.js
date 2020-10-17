@@ -1,27 +1,27 @@
-class DeviceView {
-	constructor(model) {
+function DeviceView(model) {
 		this._model = model;
     	this._element = null;
     	this._stateIndicator = null;
 		this._DeleteSubmitBtn = null;
-	}
+}
+	
 
-	get id () {
+	DeviceView.prototype.getId = function () {
 		return this._model.id;
 	}
 
-	get type () {
+	DeviceView.prototype.getType = function () {
 		return this._model.type;
 	}
 
-	processSwitchOnClick(event) {
+	DeviceView.prototype.processSwitchOnClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.switchOn();
 		this.refreshStateDeviceView();
 	}
 
-	processSwitchOffClick(event) {
+	DeviceView.prototype.processSwitchOffClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.switchOff();
@@ -29,7 +29,7 @@ class DeviceView {
 	}
 
 
-	refreshStateDeviceView() {
+	DeviceView.prototype.refreshStateDeviceView = function() {
 
 		if (this._model.isSwitchedOn) {
 			this._stateIndicator.classList.replace('state-off', 'state-on');
@@ -41,40 +41,41 @@ class DeviceView {
         }
     }
 
-	processDeleteSubmitClick() {
-		const deviceDataSet = {
+	DeviceView.prototype.processDeleteSubmitClick = function() {
+		var deviceDataSet = {
 			type: this._model.type,
 			id: this._model.id
 		};
-		const deviceEventDelete = new CustomEvent('deviceWasDelete', {
+		var deviceEventDelete = new CustomEvent('deviceWasDelete', {
 			bubbles: true,
 			detail: deviceDataSet
 		});
 		this._element.dispatchEvent(deviceEventDelete);
 	}
-}
 
 
 
-class FormView {
+function FormView(configs) {
 
-	_element;
-	_inputName;
-	_inputType;
-	_addSubmitBtn;
-	_errorsBox;
-	_devicesTypes;
-	_uniqueTypes;
+	var _element;
+	var _inputName;
+	var _inputType;
+	var _addSubmitBtn;
+	var _errorsBox;
+	var _devicesTypes;
+	var _uniqueTypes;
 
-	constructor(configs) {
-		this._devicesTypes = configs.devicesTypes;
-		this._uniqueTypes = this._devicesTypes.reduce((previous, item) => {
-    		previous.add(item.type);
-    		return previous;
+	
+	this._devicesTypes = configs.devicesTypes;
+	this._uniqueTypes = this._devicesTypes.reduce(function(previous, item) {
+		previous.add(item.type);
+		return previous;
     	}, new Set());
 	}
 
- get element() {
+
+
+ 	FormView.prototype.getElement = function() {
     	if (this._element) {
 			return this._element;
 		}
@@ -82,8 +83,8 @@ class FormView {
 		return this._element;
 	}
 
-	renderFormView() {
-		const element = document.createElement('div');
+	FormView.prototype.renderFormView = function() {
+		var element = document.createElement('div');
 		element.classList.add('device-form');
 		element.innerHTML = '<div>'+
 				'<div class=" new-device">'+
@@ -105,10 +106,10 @@ class FormView {
                 		'</div>'+
             			'</div>'+
             '</div>';
-            const select = element.querySelector('#device-type-input');
-        for (let i = 0; i < this._devicesTypes.length; i++) {
-        	const {type, title} = this._devicesTypes[i];
-        	const option = document.createElement('option');
+            var select = element.querySelector('#device-type-input');
+        	for (var i = 0; i < this._devicesTypes.length; i++) {
+        	var {type, title} = this._devicesTypes[i];
+        	var option = document.createElement('option');
         	option.setAttribute('value', type);
         	option.textContent = title;
         	select.appendChild(option);
@@ -124,26 +125,24 @@ class FormView {
         this._element = element;
 }
 
-processAddSubmitClick() {
-    const deviceName = this._inputName.value.trim();
-    const deviceType = this._inputType.value.trim();
+DeviceView.prototype.processAddSubmitClick = function() {
+    var deviceName = this._inputName.value.trim();
+    var deviceType = this._inputType.value.trim();
     
   				
-	
-	// console.dir(_unicTypes);
 	console.dir(deviceType);
 
 
-    if (!deviceName || !deviceType || !this._uniqueTypes.has(deviceType)) {
-       this._errorsBox.innerHTML = '<p class="error-message">Поля ввода не должны быть пустыми</p>';
-        return;
-    }
+    // if (!deviceName || !deviceType || !this._uniqueTypes.has(deviceType)) {
+    //    this._errorsBox.innerHTML = '<p class="error-message">Поля ввода не должны быть пустыми</p>';
+    //     return;
+    // }
 
-    const deviceData = {
+    var deviceData = {
     	deviceName,
     	deviceType
     };
-    const deviceEvent = new CustomEvent('deviceWasCreated', {
+    var deviceEvent = new CustomEvent('deviceWasCreated', {
     	bubbles: true,
     	detail: deviceData
     });
@@ -155,22 +154,26 @@ processAddSubmitClick() {
 }
 
 
-clearErrorBox() {
+DeviceView.prototype.clearErrorBox = function() {
 this._errorsBox.innerHTML = '';
 }
 
-}
 
 
-class LampView extends DeviceView {
 
-    constructor(model) {
-    	super(model);
-    	this._input = null;
+function LampView() {
+		DeviceView.apply(this, ['model']);
+       	this._input = null;
     	this._valueIndicator = null;
     }
 
-    get element() {
+    LampView.prototype = Object.create(DeviceView.prototype);
+    LampView.prototype.constructor = LampView;
+
+    var qqq = new LampView();
+	console.dir(qqq);
+
+    LampView.prototype.getElement = function() {
     	if (this._element) {
 			return this._element;
 		}
@@ -178,35 +181,36 @@ class LampView extends DeviceView {
 		return this._element;
 	}
 
-	processSetMaxBrightnessClick(event) {
+
+	LampView.prototype.processSetMaxBrightnessClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMaxBrightness();
 		this.refreshValueLampView();
 	}
 
-	processSetMinBrightnessClick(event) {
+	LampView.prototype.processSetMinBrightnessClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMinBrightness();
 		this.refreshValueLampView();
 	}
 
-	processDecreaseBrightnessClick(event) {
+	LampView.prototype.processDecreaseBrightnessClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.decreaseBrightness();
 		this.refreshValueLampView();
 	}
 
-	processIncreaseBrightnessClick(event) {
+	LampView.prototype.processIncreaseBrightnessClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.increaseBrightness();
 		this.refreshValueLampView();
 	}
 
-	processSetCustomBrightnessClick(event) {
+	LampView.prototype.processSetCustomBrightnessClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setCustomBrightness(this._input.value);
@@ -214,8 +218,8 @@ class LampView extends DeviceView {
 		this.clearInput();
 	}
 
-	renderLampView() {
-		const element = document.createElement('div');
+	LampView.prototype.renderLampView = function() {
+		var element = document.createElement('div');
 		element.classList.add('status-box');
 		element.innerHTML = '<div>'+
 							'<p><span>Название:&nbsp;</span>'+
@@ -257,35 +261,36 @@ class LampView extends DeviceView {
                                 '</div>'+
                         '</div>';
 
-      	element.querySelector('[data-switch-on]').addEventListener('click', (event) => {
-      		this.processSwitchOnClick(event);
+      	element.querySelector('[data-switch-on]').addEventListener('click', function(event) {
+      		 return this.processSwitchOnClick(event);
       	});
 
-		element.querySelector('[data-switch-off]').addEventListener('click', (event) => {
-      		this.processSwitchOffClick(event);
+		element.querySelector('[data-switch-off]').addEventListener('click', function(event) {
+      		return this.processSwitchOffClick(event);
       	});
 
-      	element.querySelector('[data-brightness-max]').addEventListener('click', (event) => {
-      		this.processSetMaxBrightnessClick(event);
+      	element.querySelector('[data-brightness-max]').addEventListener('click', function(event) {
+      		return this.processSetMaxBrightnessClick(event);
       	});
 
-      	element.querySelector('[data-brightness-min]').addEventListener('click', (event) => {
-      		this.processSetMinBrightnessClick(event);
+      	element.querySelector('[data-brightness-min]').addEventListener('click', function(event) {
+      		return this.processSetMinBrightnessClick(event);
       	});
 
-      	element.querySelector('[data-brightness-decrease]').addEventListener('click', (event) => {
-      		this.processDecreaseBrightnessClick(event);
+      	element.querySelector('[data-brightness-decrease]').addEventListener('click', function(event) {
+      		return this.processDecreaseBrightnessClick(event);
       	});
 
-      	element.querySelector('[data-brightness-increase]').addEventListener('click', (event) => {
-      		this.processIncreaseBrightnessClick(event);
+      	element.querySelector('[data-brightness-increase]').addEventListener('click', function(event) {
+      		return this.processIncreaseBrightnessClick(event);
       	});
 
-      	element.querySelector('[data-brightness-customValue]').addEventListener('click', (event) => {
-      		this.processSetCustomBrightnessClick(event);
+      	element.querySelector('[data-brightness-customValue]').addEventListener('click', function(event) {
+      		return this.processSetCustomBrightnessClick(event);
       	});
 
       	this._element = element;
+      	console.dir(this.element);
       	this._stateIndicator = this._element.querySelector('.device-state');
       	this._valueIndicator = this._element.querySelector('.device-ligth');
       	this._input = this._element.querySelector('input.input-power');
@@ -294,14 +299,14 @@ class LampView extends DeviceView {
 		this._DeleteSubmitBtn.addEventListener('click', this.processDeleteSubmitClick.bind(this));
 	}
 
-    refreshValueLampView() {
+    LampView.prototype.refreshValueLampView = function() {
 		this._valueIndicator.textContent = this._model.getCurrentBrightness();
     }
 
-    clearInput() {
+    LampView.prototype.clearInput = function() {
     	this._input.value = null;
     }
-}
+
 
 class TvView extends DeviceView {
     constructor(model) {
