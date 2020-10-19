@@ -64,9 +64,9 @@ function Device(name, type, id) {
     };
 
 
-function DeviceLamp () {
+function DeviceLamp (name, id) {
 
-    Device.apply(this, ['name', 'lamp', 'id']);
+    Device.apply(this, [name, 'lamp', id]);
     this.state = {
         brightness: {
             min: 0,
@@ -111,7 +111,7 @@ function DeviceLamp () {
 
 function DeviceTv() {
 
-    Device.apply(this, ['name', 'tv', 'id']);
+    Device.apply(this, [name, 'tv', id]);
         this.state = {
             volume: {
                 min: 0,
@@ -183,7 +183,7 @@ function DeviceTv() {
 
 function DeviceHeater() {
 
-    Device.apply(this, ['name', 'heater', 'id']);
+    Device.apply(this, [name, 'heater', id]);
         this.state = {
             temperature: {
                 min: 0,
@@ -227,7 +227,7 @@ function DeviceHeater() {
 
 function DeviceFridge() {
 
-    Device.apply(this, ['name', 'fridge', 'id']);
+    Device.apply(this, [name, 'fridge', id]);
         this.state = {
             coldstore: {
                 min: 2,

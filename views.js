@@ -1,8 +1,10 @@
 function DeviceView(model) {
+	console.dir(model);
 		this._model = model;
     	this._element = null;
     	this._stateIndicator = null;
 		this._DeleteSubmitBtn = null;
+		console.dir(this);
 }
 	
 
@@ -57,13 +59,13 @@ function DeviceView(model) {
 
 function FormView(configs) {
 
-	var _element;
-	var _inputName;
-	var _inputType;
-	var _addSubmitBtn;
-	var _errorsBox;
-	var _devicesTypes;
-	var _uniqueTypes;
+	this._element;
+	this._inputName;
+	this._inputType;
+	this._addSubmitBtn;
+	this._errorsBox;
+	this._devicesTypes;
+	this._uniqueTypes;
 
 	
 	this._devicesTypes = configs.devicesTypes;
@@ -125,18 +127,18 @@ function FormView(configs) {
         this._element = element;
 }
 
-DeviceView.prototype.processAddSubmitClick = function() {
-    var deviceName = this._inputName.value.trim();
-    var deviceType = this._inputType.value.trim();
+	FormView.prototype.processAddSubmitClick = function() {
+    	var deviceName = this._inputName.value.trim();
+    	var deviceType = this._inputType.value.trim();
     
   				
 	console.dir(deviceType);
 
 
-    // if (!deviceName || !deviceType || !this._uniqueTypes.has(deviceType)) {
-    //    this._errorsBox.innerHTML = '<p class="error-message">Поля ввода не должны быть пустыми</p>';
-    //     return;
-    // }
+    if (!deviceName || !deviceType || !this._uniqueTypes.has(deviceType)) {
+       this._errorsBox.innerHTML = '<p class="error-message">Поля ввода не должны быть пустыми</p>';
+        return;
+    }
 
     var deviceData = {
     	deviceName,
@@ -154,15 +156,15 @@ DeviceView.prototype.processAddSubmitClick = function() {
 }
 
 
-DeviceView.prototype.clearErrorBox = function() {
+FormView.prototype.clearErrorBox = function() {
 this._errorsBox.innerHTML = '';
 }
 
 
 
 
-function LampView() {
-		DeviceView.apply(this, ['model']);
+function LampView(model) {
+		DeviceView.apply(this, [model]);
        	this._input = null;
     	this._valueIndicator = null;
     }
@@ -170,9 +172,7 @@ function LampView() {
     LampView.prototype = Object.create(DeviceView.prototype);
     LampView.prototype.constructor = LampView;
 
-    var qqq = new LampView();
-	console.dir(qqq);
-
+    
     LampView.prototype.getElement = function() {
     	if (this._element) {
 			return this._element;
@@ -262,35 +262,34 @@ function LampView() {
                         '</div>';
 
       	element.querySelector('[data-switch-on]').addEventListener('click', function(event) {
-      		 return this.processSwitchOnClick(event);
+      		  this.processSwitchOnClick(event);
       	});
 
 		element.querySelector('[data-switch-off]').addEventListener('click', function(event) {
-      		return this.processSwitchOffClick(event);
+      		 this.processSwitchOffClick(event);
       	});
 
       	element.querySelector('[data-brightness-max]').addEventListener('click', function(event) {
-      		return this.processSetMaxBrightnessClick(event);
+      		 this.processSetMaxBrightnessClick(event);
       	});
 
       	element.querySelector('[data-brightness-min]').addEventListener('click', function(event) {
-      		return this.processSetMinBrightnessClick(event);
+      		 this.processSetMinBrightnessClick(event);
       	});
 
       	element.querySelector('[data-brightness-decrease]').addEventListener('click', function(event) {
-      		return this.processDecreaseBrightnessClick(event);
+      		 this.processDecreaseBrightnessClick(event);
       	});
 
       	element.querySelector('[data-brightness-increase]').addEventListener('click', function(event) {
-      		return this.processIncreaseBrightnessClick(event);
+      		 this.processIncreaseBrightnessClick(event);
       	});
 
       	element.querySelector('[data-brightness-customValue]').addEventListener('click', function(event) {
-      		return this.processSetCustomBrightnessClick(event);
+      		 this.processSetCustomBrightnessClick(event);
       	});
 
       	this._element = element;
-      	console.dir(this.element);
       	this._stateIndicator = this._element.querySelector('.device-state');
       	this._valueIndicator = this._element.querySelector('.device-ligth');
       	this._input = this._element.querySelector('input.input-power');
@@ -308,16 +307,18 @@ function LampView() {
     }
 
 
-class TvView extends DeviceView {
-    constructor(model) {
-    	super(model);
+function TvView () {
+    DeviceView.apply(this, ['model']);
     	this._input = null;
     	this._inputTwo = null;
     	this._valueIndicator = null;
     	this._valueIndicatorTwo = null;
     }
 
-    get element() {
+    TvView.prototype = Object.create(DeviceView.prototype);
+    TvView.prototype.constructor = TvView;
+
+    TvView.prototype.getElement = function() {
     	if (this._element) {
 		return this._element;
 		}
@@ -325,35 +326,35 @@ class TvView extends DeviceView {
 		return this._element;
 	}
 
-	processSetMaxChannelClick(event) {
+	TvView.prototype.processSetMaxChannelClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMaxChannel();
 		this.refreshValueChannelView();
 	}
 
-	processSetMinChannelClick(event) {
+	TvView.prototype.processSetMinChannelClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMinChannel();
 		this.refreshValueChannelView();
 	}
 
-	processDecreaseChannelClick(event) {
+	TvView.prototype.processDecreaseChannelClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.decreaseChannel();
 		this.refreshValueChannelView();
 	}
 
-	processIncreaseChannelClick(event) {
+	TvView.prototype.processIncreaseChannelClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.increaseChannel();
 		this.refreshValueChannelView();
 	}
 
-	processSetCustomChanelClick(event) {
+	TvView.prototype.processSetCustomChanelClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setCustomChannel(this._input.value);
@@ -361,35 +362,35 @@ class TvView extends DeviceView {
 		this.clearInputChannel();
 	}
 
-	processSetMaxVolumeClick(event) {
+	TvView.prototype.processSetMaxVolumeClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMaxVolume();
 		this.refreshValueVolumeView();
 	}
 
-	processSetMinVolumeClick(event) {
+	TvView.prototype.processSetMinVolumeClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMinVolume();
 		this.refreshValueVolumeView();
 	}
 
-	processDecreaseVolumeClick(event) {
+	TvView.prototype.processDecreaseVolumeClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.decreaseVolume();
 		this.refreshValueVolumeView();
 	}
 
-	processIncreaseVolumeClick(event) {
+	TvView.prototype.processIncreaseVolumeClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.increaseVolume();
 		this.refreshValueVolumeView();
 	}
 
-	processSetCustomVolumeClick(event) {
+	TvView.prototype.processSetCustomVolumeClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setCustomVolume(this._inputTwo.value);
@@ -397,8 +398,8 @@ class TvView extends DeviceView {
 		this.clearInputVolume();
 	}
 
-	renderTvView() {
-		const elementTv = document.createElement('div');
+	TvView.prototype.renderTvView = function() {
+		var elementTv = document.createElement('div');
 		elementTv.classList.add('status-box');
 		elementTv.innerHTML = '<div>'+
 							'<p><span>Название:&nbsp;</span>'+
@@ -459,52 +460,52 @@ class TvView extends DeviceView {
                                     '<button id="delete-device">Удалить устройство</button>'+
                                 '</div>'+
                         '</div>';
-      	elementTv.querySelector('[data-switch-on]').addEventListener('click', (event) => {
-      		this.processSwitchOnClick(event);
+      	elementTv.querySelector('[data-switch-on]').addEventListener('click', function(event) {
+      		 this.processSwitchOnClick(event);
       	});
 
-		elementTv.querySelector('[data-switch-off]').addEventListener('click', (event) => {
-      		this.processSwitchOffClick(event);
+		elementTv.querySelector('[data-switch-off]').addEventListener('click', function(event) {
+      		 this.processSwitchOffClick(event);
       	});
 
-      	elementTv.querySelector('[data-channel-max]').addEventListener('click', (event) => {
-      		this.processSetMaxChannelClick(event);
+      	elementTv.querySelector('[data-channel-max]').addEventListener('click', function(event) {
+      		 this.processSetMaxChannelClick(event);
       	});
 
-      	elementTv.querySelector('[data-channel-min]').addEventListener('click', (event) => {
-      		this.processSetMinChannelClick(event);
+      	elementTv.querySelector('[data-channel-min]').addEventListener('click', function(event) {
+      		 this.processSetMinChannelClick(event);
       	});
 
-      	elementTv.querySelector('[data-channel-decrease]').addEventListener('click', (event) => {
-      		this.processDecreaseChannelClick(event);
+      	elementTv.querySelector('[data-channel-decrease]').addEventListener('click', function(event) {
+      		 this.processDecreaseChannelClick(event);
       	});
 
-      	elementTv.querySelector('[data-channel-increase]').addEventListener('click', (event) => {
-      		this.processIncreaseChannelClick(event);
+      	elementTv.querySelector('[data-channel-increase]').addEventListener('click', function(event) {
+      		 this.processIncreaseChannelClick(event);
       	});
 
-      	elementTv.querySelector('[data-channel-customValue]').addEventListener('click', (event) => {
-      		this.processSetCustomChanelClick(event);
+      	elementTv.querySelector('[data-channel-customValue]').addEventListener('click', function(event) {
+      		 this.processSetCustomChanelClick(event);
       	});
 
-      	elementTv.querySelector('[data-volume-max]').addEventListener('click', (event) => {
-      		this.processSetMaxVolumeClick(event);
+      	elementTv.querySelector('[data-volume-max]').addEventListener('click', function(event) {
+      		 this.processSetMaxVolumeClick(event);
       	});
 
-      	elementTv.querySelector('[data-volume-min]').addEventListener('click', (event) => {
-      		this.processSetMinVolumeClick(event);
+      	elementTv.querySelector('[data-volume-min]').addEventListener('click', function(event) {
+      		 this.processSetMinVolumeClick(event);
       	});
 
-      	elementTv.querySelector('[data-volume-decrease]').addEventListener('click', (event) => {
-      		this.processDecreaseVolumeClick(event);
+      	elementTv.querySelector('[data-volume-decrease]').addEventListener('click', function(event) {
+      		 this.processDecreaseVolumeClick(event);
       	});
 
-      	elementTv.querySelector('[data-volume-increase]').addEventListener('click', (event) => {
-      		this.processIncreaseVolumeClick(event);
+      	elementTv.querySelector('[data-volume-increase]').addEventListener('click', function(event) {
+      		 this.processIncreaseVolumeClick(event);
       	});
 
-      	elementTv.querySelector('[data-volume-customValue]').addEventListener('click', (event) => {
-      		this.processSetCustomVolumeClick(event);
+      	elementTv.querySelector('[data-volume-customValue]').addEventListener('click', function(event) {
+      		 this.processSetCustomVolumeClick(event);
       	});
 
       	this._element = elementTv;
@@ -520,23 +521,24 @@ class TvView extends DeviceView {
 		this._DeleteSubmitBtn.addEventListener('click', this.processDeleteSubmitClick.bind(this));
 	}
 
-    refreshValueChannelView() {
+
+
+    TvView.prototype.refreshValueChannelView = function() {
 		this._valueIndicator.textContent = this._model.getCurrentChannel();
     }
 
-    refreshValueVolumeView() {
+    TvView.prototype.refreshValueVolumeView = function() {
 		this._valueIndicatorTwo.textContent = this._model.getCurrentVolume();
     }
 
-    clearInputChannel() {
+    TvView.prototype.clearInputChannel = function() {
     	this._input.value = null;
     }
 
-    clearInputVolume() {
+    TvView.prototype.clearInputVolume = function() {
     	this._inputTwo.value = null;
     }
 
-}
 
 class HeaterView extends DeviceView {
 	constructor(model) {

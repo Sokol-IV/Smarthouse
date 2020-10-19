@@ -8,10 +8,9 @@ class Controller {
 
 	init() {
 		const formContainer = document.getElementById('form-rendering');
-		console.dir(formContainer);
 		const form = new FormView(configs);
 		console.dir(form);
-		formContainer.appendChild(form.element);
+		formContainer.appendChild(form.getElement());
 		this._container = document.getElementById('container');
 		this._devicesContainer = document.getElementById('all-devices');
 		this._container.addEventListener('deviceWasCreated', this.processAddDevice.bind(this));
@@ -70,18 +69,20 @@ class Controller {
 
 	addView(element) {
 		let holder;
-		const htmlId = element.type + '-container';
+		console.dir(element.getType());
+		const htmlId = element.getType() + '-container';
 		holder = this._devicesContainer.querySelector('#' + htmlId);
 		if (!holder) {
 			const device = this._configs.devicesTypes.filter((item) => {
-				return item.type === element.type;
+				return item.type === element.getType();
 			});
 			const wrapper = document.createElement('div');
+			console.dir(device);
 			wrapper.innerHTML = 	'<h2>' + device[0].title + '</h2>\n' +
 								'<div class="colm-cont" id="' + htmlId + '"></div>';
 			holder = wrapper.querySelector('#' + htmlId);
 			this._devicesContainer.appendChild(wrapper);
 		}
-		holder.appendChild(element.element);
+		holder.appendChild(element.getElement());
 	}
 }
