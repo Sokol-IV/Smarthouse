@@ -109,7 +109,7 @@ function DeviceLamp (name, id) {
 
 
 
-function DeviceTv() {
+function DeviceTv(name, id) {
 
     Device.apply(this, [name, 'tv', id]);
         this.state = {
@@ -181,7 +181,7 @@ function DeviceTv() {
 
 
 
-function DeviceHeater() {
+function DeviceHeater(name, id) {
 
     Device.apply(this, [name, 'heater', id]);
         this.state = {
@@ -225,7 +225,7 @@ function DeviceHeater() {
     }
 
 
-function DeviceFridge() {
+function DeviceFridge(name, id) {
 
     Device.apply(this, [name, 'fridge', id]);
         this.state = {
@@ -302,9 +302,3 @@ function DeviceFridge() {
     DeviceFridge.prototype.setCustomFreezer = function(value) {
         this.setCustomValue('freezer', value)
     }
-
-
-
-
-
-

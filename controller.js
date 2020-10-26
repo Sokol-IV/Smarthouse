@@ -23,7 +23,7 @@ class Controller {
 		let element;
 		
 		const { deviceType, deviceName } = event.detail;
-		console.dir(deviceType);
+		// console.dir(deviceType);
 		switch(deviceType) {
 			case 'lamp':
 				device = new DeviceLamp(deviceName, id);
@@ -51,14 +51,26 @@ class Controller {
 	}
 
 	processRemoveDevice(event) {
+		console.dir(event);
 		const device = {...event.detail};
 		const deviceToDelete = this._store.getDevice(device.id);
+		console.dir(deviceToDelete);
 		if (deviceToDelete) {
 			try {
 				const { model, view } = deviceToDelete;
+				console.dir(model);
+				console.dir(view);
 				const container = this._devicesContainer.querySelector('#' + model.type + '-container');
-				container.removeChild(view.element);
-				this._store.removeDevice(device.id);
+				console.dir(container);
+				console.dir(view.getElement());
+				const isDeviceRemoved = this._store.removeDevice(device.id);
+				if (isDeviceRemoved) {
+					container.removeChild(view.getElement());
+				}
+				
+				// console.dir(view.element);
+				
+				console.dir(store);
 			} catch (error) {
 				alert(error);
 			} finally {
@@ -69,7 +81,7 @@ class Controller {
 
 	addView(element) {
 		let holder;
-		console.dir(element.getType());
+		// console.dir(element.getType());
 		const htmlId = element.getType() + '-container';
 		holder = this._devicesContainer.querySelector('#' + htmlId);
 		if (!holder) {

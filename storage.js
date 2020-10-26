@@ -7,7 +7,9 @@ class Storage {
         //     prev[item.type] = [];
         //     return prev;
         // }, {});
+        console.dir(this);
         this._state = new Map();
+        console.dir(this._state);
 	}
 
 	// getDeviceView(deviceData) {
@@ -22,13 +24,15 @@ class Storage {
     // }
 
     getDevice(id) {
+        // console.dir(id);
         if (
             !id ||
             !this._state.has(id)
         ) {
             return null;
         }
-        return this._state.get(id);;
+        return this._state.get(id);
+        // console.dir(id);
     }
 
     // addDevice(device) {
@@ -48,23 +52,27 @@ class Storage {
 
 
     addDevice(model, view) {
+        console.dir(model);
+        console.dir(view);
+        console.dir(model.id);
+        console.dir(view.getId());
         if (
             !model ||
             !view ||
             !model.id ||
-            !view.id ||
-            model.id !== view.id
+            !view.getId() ||
+            model.id !== view.getId()
         ) {
             return;
         }
         this._state.set(model.id, { model, view })
     }
 
-    removeDevice(device) {
-        const id = device.id;
+    removeDevice(id) {
         if (id && this._state.has(id)) {
             this._state.delete(id);
         }
+        return this._state.has(id); 
     }
 
     // removeDevice(device) {

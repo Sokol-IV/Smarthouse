@@ -48,10 +48,15 @@ function DeviceView(model) {
 			type: this._model.type,
 			id: this._model.id
 		};
+
+		console.dir(deviceDataSet);
+
 		var deviceEventDelete = new CustomEvent('deviceWasDelete', {
 			bubbles: true,
 			detail: deviceDataSet
 		});
+		console.dir(deviceEventDelete);
+		
 		this._element.dispatchEvent(deviceEventDelete);
 	}
 
@@ -132,7 +137,7 @@ function FormView(configs) {
     	var deviceType = this._inputType.value.trim();
     
   				
-	console.dir(deviceType);
+	// console.dir(deviceType);
 
 
     if (!deviceName || !deviceType || !this._uniqueTypes.has(deviceType)) {
@@ -144,12 +149,15 @@ function FormView(configs) {
     	deviceName,
     	deviceType
     };
+    console.dir(deviceData);
+
     var deviceEvent = new CustomEvent('deviceWasCreated', {
     	bubbles: true,
     	detail: deviceData
     });
 
     console.dir(deviceData);
+
     this._element.dispatchEvent(deviceEvent);
     this._inputName.value = null;
     this._inputType.value = 'lamp';
@@ -261,33 +269,19 @@ function LampView(model) {
                                 '</div>'+
                         '</div>';
 
-      	element.querySelector('[data-switch-on]').addEventListener('click', function(event) {
-      		  this.processSwitchOnClick(event);
-      	});
+      	element.querySelector('[data-switch-on]').addEventListener('click', this.processSwitchOnClick.bind(this));
 
-		element.querySelector('[data-switch-off]').addEventListener('click', function(event) {
-      		 this.processSwitchOffClick(event);
-      	});
+		element.querySelector('[data-switch-off]').addEventListener('click', this.processSwitchOffClick.bind(this));
 
-      	element.querySelector('[data-brightness-max]').addEventListener('click', function(event) {
-      		 this.processSetMaxBrightnessClick(event);
-      	});
+      	element.querySelector('[data-brightness-max]').addEventListener('click', this.processSetMaxBrightnessClick.bind(this));
 
-      	element.querySelector('[data-brightness-min]').addEventListener('click', function(event) {
-      		 this.processSetMinBrightnessClick(event);
-      	});
+      	element.querySelector('[data-brightness-min]').addEventListener('click', this.processSetMinBrightnessClick.bind(this));
 
-      	element.querySelector('[data-brightness-decrease]').addEventListener('click', function(event) {
-      		 this.processDecreaseBrightnessClick(event);
-      	});
+      	element.querySelector('[data-brightness-decrease]').addEventListener('click', this.processDecreaseBrightnessClick.bind(this));
 
-      	element.querySelector('[data-brightness-increase]').addEventListener('click', function(event) {
-      		 this.processIncreaseBrightnessClick(event);
-      	});
+      	element.querySelector('[data-brightness-increase]').addEventListener('click', this.processIncreaseBrightnessClick.bind(this));
 
-      	element.querySelector('[data-brightness-customValue]').addEventListener('click', function(event) {
-      		 this.processSetCustomBrightnessClick(event);
-      	});
+      	element.querySelector('[data-brightness-customValue]').addEventListener('click', this.processSetCustomBrightnessClick.bind(this));
 
       	this._element = element;
       	this._stateIndicator = this._element.querySelector('.device-state');
@@ -295,7 +289,10 @@ function LampView(model) {
       	this._input = this._element.querySelector('input.input-power');
 
       	this._DeleteSubmitBtn = this._element.querySelector('#delete-device');
+      // console.dir(this);
 		this._DeleteSubmitBtn.addEventListener('click', this.processDeleteSubmitClick.bind(this));
+		// console.dir(this);
+		
 	}
 
     LampView.prototype.refreshValueLampView = function() {
@@ -307,8 +304,8 @@ function LampView(model) {
     }
 
 
-function TvView () {
-    DeviceView.apply(this, ['model']);
+function TvView (model) {
+    DeviceView.apply(this, [model]);
     	this._input = null;
     	this._inputTwo = null;
     	this._valueIndicator = null;
@@ -460,53 +457,29 @@ function TvView () {
                                     '<button id="delete-device">Удалить устройство</button>'+
                                 '</div>'+
                         '</div>';
-      	elementTv.querySelector('[data-switch-on]').addEventListener('click', function(event) {
-      		 this.processSwitchOnClick(event);
-      	});
+      	elementTv.querySelector('[data-switch-on]').addEventListener('click', this.processSwitchOnClick.bind(this));
 
-		elementTv.querySelector('[data-switch-off]').addEventListener('click', function(event) {
-      		 this.processSwitchOffClick(event);
-      	});
+		elementTv.querySelector('[data-switch-off]').addEventListener('click', this.processSwitchOffClick.bind(this));
 
-      	elementTv.querySelector('[data-channel-max]').addEventListener('click', function(event) {
-      		 this.processSetMaxChannelClick(event);
-      	});
+      	elementTv.querySelector('[data-channel-max]').addEventListener('click', this.processSetMaxChannelClick.bind(this));
 
-      	elementTv.querySelector('[data-channel-min]').addEventListener('click', function(event) {
-      		 this.processSetMinChannelClick(event);
-      	});
+      	elementTv.querySelector('[data-channel-min]').addEventListener('click', this.processSetMinChannelClick.bind(this));
 
-      	elementTv.querySelector('[data-channel-decrease]').addEventListener('click', function(event) {
-      		 this.processDecreaseChannelClick(event);
-      	});
+      	elementTv.querySelector('[data-channel-decrease]').addEventListener('click', this.processDecreaseChannelClick.bind(this));
 
-      	elementTv.querySelector('[data-channel-increase]').addEventListener('click', function(event) {
-      		 this.processIncreaseChannelClick(event);
-      	});
+      	elementTv.querySelector('[data-channel-increase]').addEventListener('click', this.processIncreaseChannelClick.bind(this));
 
-      	elementTv.querySelector('[data-channel-customValue]').addEventListener('click', function(event) {
-      		 this.processSetCustomChanelClick(event);
-      	});
+      	elementTv.querySelector('[data-channel-customValue]').addEventListener('click', this.processSetCustomChanelClick.bind(this));
 
-      	elementTv.querySelector('[data-volume-max]').addEventListener('click', function(event) {
-      		 this.processSetMaxVolumeClick(event);
-      	});
+      	elementTv.querySelector('[data-volume-max]').addEventListener('click', this.processSetMaxVolumeClick.bind(this));
 
-      	elementTv.querySelector('[data-volume-min]').addEventListener('click', function(event) {
-      		 this.processSetMinVolumeClick(event);
-      	});
+      	elementTv.querySelector('[data-volume-min]').addEventListener('click', this.processSetMinVolumeClick.bind(this));
 
-      	elementTv.querySelector('[data-volume-decrease]').addEventListener('click', function(event) {
-      		 this.processDecreaseVolumeClick(event);
-      	});
+      	elementTv.querySelector('[data-volume-decrease]').addEventListener('click', this.processDecreaseVolumeClick.bind(this));
 
-      	elementTv.querySelector('[data-volume-increase]').addEventListener('click', function(event) {
-      		 this.processIncreaseVolumeClick(event);
-      	});
+      	elementTv.querySelector('[data-volume-increase]').addEventListener('click', this.processIncreaseVolumeClick.bind(this));
 
-      	elementTv.querySelector('[data-volume-customValue]').addEventListener('click', function(event) {
-      		 this.processSetCustomVolumeClick(event);
-      	});
+      	elementTv.querySelector('[data-volume-customValue]').addEventListener('click', this.processSetCustomVolumeClick.bind(this));
 
       	this._element = elementTv;
 
@@ -518,7 +491,9 @@ function TvView () {
       	this._inputTwo = this._element.getElementsByTagName('input')[1];
 
       	this._DeleteSubmitBtn = this._element.querySelector('#delete-device');
+console.dir(this);
 		this._DeleteSubmitBtn.addEventListener('click', this.processDeleteSubmitClick.bind(this));
+		console.dir(this);
 	}
 
 
@@ -540,14 +515,16 @@ function TvView () {
     }
 
 
-class HeaterView extends DeviceView {
-	constructor(model) {
-		super(model);
-		this._input = null;
-		this._valueIndicator = null;
-    }
+function HeaterView(model) {
+	DeviceView.apply(this, [model]);
+	this._input = null;
+	this._valueIndicator = null;
+}
 
-	get element() {
+	HeaterView.prototype = Object.create(DeviceView.prototype);
+    HeaterView.prototype.constructor = HeaterView;
+
+	HeaterView.prototype.getElement = function() {
     	if (this._element) {
 			return this._element;
 		}
@@ -555,35 +532,35 @@ class HeaterView extends DeviceView {
 		return this._element;
 	}
 
-	processSetMaxTemperatureClick(event) {
+	HeaterView.prototype.processSetMaxTemperatureClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMaxTemperature();
 		this.refreshValueHeaterView();
 	}
 
-	processSetMinTemperatureClick(event) {
+	HeaterView.prototype.processSetMinTemperatureClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMinTemperature();
 		this.refreshValueHeaterView();
 	}
 
-	processDecreaseTemperatureClick(event) {
+	HeaterView.prototype.processDecreaseTemperatureClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.decreaseTemperature();
 		this.refreshValueHeaterView();
 	}
 
-	processIncreaseTemperatureClick(event) {
+	HeaterView.prototype.processIncreaseTemperatureClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.increaseTemperature();
 		this.refreshValueHeaterView();
 	}
 
-	processSetCustomTemperatureClick(event) {
+	HeaterView.prototype.processSetCustomTemperatureClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setCustomTemperature(this._input.value);
@@ -591,7 +568,7 @@ class HeaterView extends DeviceView {
 		this.clearInput();
 	}
 
-	renderHeaterView() {
+	HeaterView.prototype.renderHeaterView = function() {
 		const element = document.createElement('div');
 		element.classList.add('status-box');
 		element.innerHTML = '<div>'+
@@ -634,33 +611,19 @@ class HeaterView extends DeviceView {
 							'</div>'+
                         '</div>';
 
-      	element.querySelector('[data-switch-on]').addEventListener('click', (event) => {
-      		this.processSwitchOnClick(event);
-      	});
+      	element.querySelector('[data-switch-on]').addEventListener('click', this.processSwitchOnClick.bind(this));
 
-		element.querySelector('[data-switch-off]').addEventListener('click', (event) => {
-      		this.processSwitchOffClick(event);
-      	});
+		element.querySelector('[data-switch-off]').addEventListener('click', this.processSwitchOffClick.bind(this));
 
-      	element.querySelector('[data-temperature-max]').addEventListener('click', (event) => {
-      		this.processSetMaxTemperatureClick(event);
-      	});
+      	element.querySelector('[data-temperature-max]').addEventListener('click', this.processSetMaxTemperatureClick.bind(this));
 
-      	element.querySelector('[data-temperature-min]').addEventListener('click', (event) => {
-      		this.processSetMinTemperatureClick(event);
-      	});
+      	element.querySelector('[data-temperature-min]').addEventListener('click', this.processSetMinTemperatureClick.bind(this));
 
-      	element.querySelector('[data-temperature-decrease]').addEventListener('click', (event) => {
-      		this.processDecreaseTemperatureClick(event);
-      	});
+      	element.querySelector('[data-temperature-decrease]').addEventListener('click', this.processDecreaseTemperatureClick.bind(this));
 
-      	element.querySelector('[data-temperature-increase]').addEventListener('click', (event) => {
-      		this.processIncreaseTemperatureClick(event);
-      	});
+      	element.querySelector('[data-temperature-increase]').addEventListener('click', this.processIncreaseTemperatureClick.bind(this));
 
-      	element.querySelector('[data-temperature-customValue]').addEventListener('click', (event) => {
-      		this.processSetCustomTemperatureClick(event);
-      	});
+      	element.querySelector('[data-temperature-customValue]').addEventListener('click', this.processSetCustomTemperatureClick.bind(this));
 
       	this._element = element;
       	this._stateIndicator = this._element.querySelector('.device-state');
@@ -670,27 +633,28 @@ class HeaterView extends DeviceView {
 		this._DeleteSubmitBtn.addEventListener('click', this.processDeleteSubmitClick.bind(this));
 	}
 
-	refreshValueHeaterView() {
+	HeaterView.prototype.refreshValueHeaterView = function() {
 		this._valueIndicator.textContent = this._model.getCurrentTemperature();
     }
 
 
-    clearInput() {
+    HeaterView.prototype.clearInput = function() {
     	this._input.value = null;
     }
-}
 
 
-class FridgeView extends DeviceView {
-    constructor(model) {
-    	super(model);
+function FridgeView(model) {
+   DeviceView.apply(this, [model]);
 		this._input = null;
 		this._inputTwo = null;
 		this._valueIndicator = null;
 		this._valueIndicatorTwo = null;
     }
 
-    get element() {
+	FridgeView.prototype = Object.create(DeviceView.prototype);
+    FridgeView.prototype.constructor = FridgeView;
+
+    FridgeView.prototype.getElement = function() {
     	if (this._element) {
 		return this._element;
 		}
@@ -698,35 +662,35 @@ class FridgeView extends DeviceView {
 		return this._element;
 	}
 
-	processSetMaxColdstoreClick(event) {
+	FridgeView.prototype.processSetMaxColdstoreClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMaxColdstore();
 		this.refreshValueColdstoreView();
 	}
 
-	processSetMinColdstoreClick(event) {
+	FridgeView.prototype.processSetMinColdstoreClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMinColdstore();
 		this.refreshValueColdstoreView();
 	}
 
-	processDecreaseColdstoreClick(event) {
+	FridgeView.prototype.processDecreaseColdstoreClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.decreaseColdstore();
 		this.refreshValueColdstoreView();
 	}
 
-	processIncreaseColdstoreClick(event) {
+	FridgeView.prototype.processIncreaseColdstoreClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.increaseColdstore();
 		this.refreshValueColdstoreView();
 	}
 
-	processSetCustomColdstoreClick(event) {
+	FridgeView.prototype.processSetCustomColdstoreClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setCustomColdstore(this._input.value);
@@ -734,35 +698,35 @@ class FridgeView extends DeviceView {
 		this.clearInputColdstore();
 	}
 
-	processSetMaxFreezerClick(event) {
+	FridgeView.prototype.processSetMaxFreezerClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMaxFreezer();
 		this.refreshValueFreezerView();
 	}
 
-	processSetMinFreezerClick(event) {
+	FridgeView.prototype.processSetMinFreezerClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setMinFreezer();
 		this.refreshValueFreezerView();
 	}
 
-	processDecreaseFreezerClick(event) {
+	FridgeView.prototype.processDecreaseFreezerClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.decreaseFreezer();
 		this.refreshValueFreezerView();
 	}
 
-	processIncreaseFreezerClick(event) {
+	FridgeView.prototype.processIncreaseFreezerClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.increaseFreezer();
 		this.refreshValueFreezerView();
 	}
 
-	processSetCustomFreezerClick(event) {
+	FridgeView.prototype.processSetCustomFreezerClick = function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this._model.setCustomFreezer(this._inputTwo.value);
@@ -770,7 +734,7 @@ class FridgeView extends DeviceView {
 		this.clearInputFreezer();
 	}
 
-	renderFridgeView() {
+	FridgeView.prototype.renderFridgeView = function() {
 		const elementTv = document.createElement('div');
 		elementTv.classList.add('status-box');
 		elementTv.innerHTML = '<div>'+
@@ -832,53 +796,29 @@ class FridgeView extends DeviceView {
 								'<button id="delete-device">Удалить устройство</button>'+
 							'</div>'+
                         '</div>';
-      	elementTv.querySelector('[data-switch-on]').addEventListener('click', (event) => {
-      		this.processSwitchOnClick(event);
-      	});
+      	elementTv.querySelector('[data-switch-on]').addEventListener('click', this.processSwitchOnClick.bind(this));
 
-		elementTv.querySelector('[data-switch-off]').addEventListener('click', (event) => {
-      		this.processSwitchOffClick(event);
-      	});
+		elementTv.querySelector('[data-switch-off]').addEventListener('click', this.processSwitchOffClick.bind(this));
 
-      	elementTv.querySelector('[data-coldstore-max]').addEventListener('click', (event) => {
-      		this.processSetMaxColdstoreClick(event);
-      	});
+      	elementTv.querySelector('[data-coldstore-max]').addEventListener('click', this.processSetMaxColdstoreClick.bind(this));
 
-      	elementTv.querySelector('[data-coldstore-min]').addEventListener('click', (event) => {
-      		this.processSetMinColdstoreClick(event);
-      	});
+      	elementTv.querySelector('[data-coldstore-min]').addEventListener('click', this.processSetMinColdstoreClick.bind(this));
 
-      	elementTv.querySelector('[data-coldstore-decrease]').addEventListener('click', (event) => {
-      		this.processDecreaseColdstoreClick(event);
-      	});
+      	elementTv.querySelector('[data-coldstore-decrease]').addEventListener('click', this.processDecreaseColdstoreClick.bind(this));
 
-      	elementTv.querySelector('[data-coldstore-increase]').addEventListener('click', (event) => {
-      		this.processIncreaseColdstoreClick(event);
-      	});
+      	elementTv.querySelector('[data-coldstore-increase]').addEventListener('click', this.processIncreaseColdstoreClick.bind(this));
+	
+      	elementTv.querySelector('[data-coldstore-customValue]').addEventListener('click', this.processSetCustomColdstoreClick.bind(this));
 
-      	elementTv.querySelector('[data-coldstore-customValue]').addEventListener('click', (event) => {
-      		this.processSetCustomColdstoreClick(event);
-      	});
+      	elementTv.querySelector('[data-freezer-max]').addEventListener('click',	this.processSetMaxFreezerClick.bind(this));
+	
+      	elementTv.querySelector('[data-freezer-min]').addEventListener('click', this.processSetMinFreezerClick.bind(this));
 
-      	elementTv.querySelector('[data-freezer-max]').addEventListener('click', (event) => {
-      		this.processSetMaxFreezerClick(event);
-      	});
+      	elementTv.querySelector('[data-freezer-decrease]').addEventListener('click', this.processDecreaseFreezerClick.bind(this));
+	
+      	elementTv.querySelector('[data-freezer-increase]').addEventListener('click', this.processIncreaseFreezerClick.bind(this));
 
-      	elementTv.querySelector('[data-freezer-min]').addEventListener('click', (event) => {
-      		this.processSetMinFreezerClick(event);
-      	});
-
-      	elementTv.querySelector('[data-freezer-decrease]').addEventListener('click', (event) => {
-      		this.processDecreaseFreezerClick(event);
-      	});
-
-      	elementTv.querySelector('[data-freezer-increase]').addEventListener('click', (event) => {
-      		this.processIncreaseFreezerClick(event);
-      	});
-
-      	elementTv.querySelector('[data-freezer-customValue]').addEventListener('click', (event) => {
-      		this.processSetCustomFreezerClick(event);
-      	});
+      	elementTv.querySelector('[data-freezer-customValue]').addEventListener('click', this.processSetCustomFreezerClick.bind(this));
 
       	this._element = elementTv;
 
@@ -893,21 +833,18 @@ class FridgeView extends DeviceView {
 	}
 
 
-
-    refreshValueColdstoreView() {
+    FridgeView.prototype.refreshValueColdstoreView = function() {
 		this._valueIndicator.textContent = this._model.getCurrentColdstore();
     }
 
-    refreshValueFreezerView() {
+    FridgeView.prototype.refreshValueFreezerView = function() {
 		this._valueIndicatorTwo.textContent = this._model.getCurrentFreezer();
     }
 
-    clearInputColdstore() {
+    FridgeView.prototype.clearInputColdstore = function() {
     	this._input.value = null;
     }
 
-    clearInputFreezer() {
+    FridgeView.prototype.clearInputFreezer = function() {
     	this._inputTwo.value = null;
     }
-
-}
