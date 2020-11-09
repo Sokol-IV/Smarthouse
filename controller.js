@@ -1,26 +1,23 @@
-class Controller {
-
-	constructor(store, configs) {
+function Controller(store, configs) {
 		this._store = store;
 		this._container = null;
 		this._configs = configs;
-	}
 
-	init() {
-		const formContainer = document.getElementById('form-rendering');
-		const form = new FormView(configs);
+	 Controller.prototype.init = function() {
+		var formContainer = document.getElementById('form-rendering');
+		var form = new FormView(configs);
 		console.dir(form);
-		formContainer.appendChild(form.getElement());
+		formContainer.appendChild(form.getElement()); //
 		this._container = document.getElementById('container');
 		this._devicesContainer = document.getElementById('all-devices');
 		this._container.addEventListener('deviceWasCreated', this.processAddDevice.bind(this));
 		this._container.addEventListener('deviceWasDelete', this.processRemoveDevice.bind(this));
 	}
 
-	processAddDevice(event) {
-		const id = Date.now();
-		let device;
-		let element;
+	Controller.prototype.processAddDevice = function(event) {
+		var id = Date.now();
+		var device;
+		var element;
 		
 		const { deviceType, deviceName } = event.detail;
 		// console.dir(deviceType);
@@ -46,51 +43,56 @@ class Controller {
 			default:
 				return;
 		}
-		this._store.addDevice(device, element);
+		var isDeviceAdded = this._store.addDevice(device, element);
+		if (isDeviceAdded) {
 		this.addView(element);
 	}
+	}
 
-	processRemoveDevice(event) {
+	Controller.prototype.processRemoveDevice = function(event) {
 		console.dir(event);
-		const device = {...event.detail};
-		const deviceToDelete = this._store.getDevice(device.id);
+		var device = event.detail;
+		var deviceToDelete = this._store.getDevice(device.id);
 		console.dir(deviceToDelete);
 		if (deviceToDelete) {
-			try {
-				const { model, view } = deviceToDelete;
+				var { model: model,
+				view: view } = deviceToDelete;
 				console.dir(model);
 				console.dir(view);
-				const container = this._devicesContainer.querySelector('#' + model.type + '-container');
-				console.dir(container);
-				console.dir(view.getElement());
-				const isDeviceRemoved = this._store.removeDevice(device.id);
+				var container = this._devicesContainer.querySelector('#' + model.type + '-container');
+				// console.dir(container);
+				// console.dir(view.getElement());
+				var isDeviceRemoved = this._store.removeDevice(device.id);
+				console.dir(isDeviceRemoved);
 				if (isDeviceRemoved) {
 					container.removeChild(view.getElement());
+					
 				}
 				
 				// console.dir(view.element);
 				
 				console.dir(store);
-			} catch (error) {
-				alert(error);
-			} finally {
-				console.log('Device removing procedure is completed');
-			}
+			// catch (error) {
+			// 	alert(error);
+			// } finally {
+			// 	console.log('Device removing procedure is completed');
+			// }
 		}
 	}
 
-	addView(element) {
-		let holder;
+	Controller.prototype.addView = function(element) {
+		var holder;
 		// console.dir(element.getType());
-		const htmlId = element.getType() + '-container';
+		var htmlId = element.getType() + '-container';
 		holder = this._devicesContainer.querySelector('#' + htmlId);
 		if (!holder) {
-			const device = this._configs.devicesTypes.filter((item) => {
+			var device = this._configs.devicesTypes.filter(function(item) {
 				return item.type === element.getType();
 			});
-			const wrapper = document.createElement('div');
+			
+			var wrapper = document.createElement('div');
 			console.dir(device);
-			wrapper.innerHTML = 	'<h2>' + device[0].title + '</h2>\n' +
+			wrapper.innerHTML = '<h2>' + device[0].title + '</h2>\n' +
 								'<div class="colm-cont" id="' + htmlId + '"></div>';
 			holder = wrapper.querySelector('#' + htmlId);
 			this._devicesContainer.appendChild(wrapper);

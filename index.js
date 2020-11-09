@@ -1,4 +1,4 @@
-const configs = {
+var configs = {
     devicesTypes: [
         {
             type: 'lamp',
@@ -19,9 +19,6 @@ const configs = {
     ]
 };
 
-const store = new Storage();
-const controller = new Controller(store, configs);
+var store = new Storage();
+var controller = new Controller(store, configs);
 controller.init();
-
-
-
