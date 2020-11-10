@@ -1,10 +1,8 @@
 function DeviceView(model) {
-	console.dir(model);
 		this._model = model;
     	this._element = null;
     	this._stateIndicator = null;
 		this._DeleteSubmitBtn = null;
-		console.dir(this);
 }
 	
 
@@ -49,13 +47,10 @@ function DeviceView(model) {
 			id: this._model.id
 		};
 
-		console.dir(deviceDataSet);
-
 		var deviceEventDelete = new CustomEvent('deviceWasDelete', {
 			bubbles: true,
 			detail: deviceDataSet
 		});
-		console.dir(deviceEventDelete);
 		
 		this._element.dispatchEvent(deviceEventDelete);
 	}
@@ -149,14 +144,11 @@ function FormView(configs) {
     	deviceName,
     	deviceType
     };
-    console.dir(deviceData);
 
     var deviceEvent = new CustomEvent('deviceWasCreated', {
     	bubbles: true,
     	detail: deviceData
     });
-
-    console.dir(deviceData);
 
     this._element.dispatchEvent(deviceEvent);
     this._inputName.value = null;
